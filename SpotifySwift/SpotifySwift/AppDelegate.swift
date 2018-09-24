@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             //Send out a notification which we can listen for in our sign in view controller
             NotificationCenter.default.post(name: NSNotification.Name.Spotify.authURLOpened, object: url)
-            
+            print("Yes")
             return true
         }
         print("NO")

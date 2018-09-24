@@ -8,13 +8,24 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController{
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        return true
+//    }
+    
 
-    @IBOutlet weak var Test: UILabel!
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        // How many rows we need
+//        return true
+//    }
+    
+    var partyData:String = ""
+    
+   // @IBOutlet weak var Test: UILabel!
     override func viewDidLoad() {
         print("NEW SCREEN")
         super.viewDidLoad()
-        
+        print(partyData)
         // Do any additional setup after loading the view.
     }
    
