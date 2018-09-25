@@ -91,7 +91,6 @@ class ViewController: UIViewController {
                //  Verification: If post request returns User Hash (Used to communicate with backend)
                 if (swiftyJsonVar["JUKE_MSG"].exists())
                 {
-                    print("USER HASH EXISTS")
                     self.performSegue(withIdentifier: "hostToJuke", sender:nil)
 
                 }

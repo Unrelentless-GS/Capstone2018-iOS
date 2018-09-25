@@ -18,7 +18,8 @@ class JoinPartyViewController: UIViewController {
     @IBOutlet weak var n_nameTextField: UITextField!
     @IBOutlet weak var r_codeTextField: UITextField!
     
-    
+    var partyData:JSON = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,7 +36,7 @@ class JoinPartyViewController: UIViewController {
         if segue.destination is MainViewController
         {
             let vc = segue.destination as? MainViewController
-            vc?.partyData = "Party to Juke"
+            vc?.partyData = self.partyData
         }
     }
     
@@ -69,6 +70,7 @@ class JoinPartyViewController: UIViewController {
                     
                     if(swiftyJsonVar["JUKE_MSG"]["UserHash"].exists())
                     {
+                        self.partyData = swiftyJsonVar["JUKE_MSG"]
                         self.performSegue(withIdentifier: "joinPartySegue", sender:nil)
                         print(swiftyJsonVar,"USER HASH!@#$")
                     }

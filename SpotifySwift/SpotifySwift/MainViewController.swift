@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class MainViewController: UIViewController{
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    @IBOutlet weak var partyNameLabel: UILabel!
+    //    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //        return true
 //    }
     
@@ -19,13 +21,22 @@ class MainViewController: UIViewController{
 //        return true
 //    }
     
-    var partyData:String = ""
+    var partyData:JSON = ""
     
    // @IBOutlet weak var Test: UILabel!
     override func viewDidLoad() {
         print("NEW SCREEN")
         super.viewDidLoad()
         print(partyData)
+        print("finish")
+        
+        self.partyNameLabel.text = partyData["HostName"].stringValue + "'s Party"
+        
+       print( partyData["HostName"].stringValue)
+        
+        
+        
+
         // Do any additional setup after loading the view.
     }
    
