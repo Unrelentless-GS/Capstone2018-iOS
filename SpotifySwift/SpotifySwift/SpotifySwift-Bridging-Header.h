@@ -4,3 +4,4 @@
 
 #import <SpotifyAuthentication/SpotifyAuthentication.h>
 #import <SpotifyAudioPlayback/SpotifyAudioPlayback.h>
+#import <SDWebImage/UIImageView+WebCache.h>

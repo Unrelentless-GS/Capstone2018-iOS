@@ -9,37 +9,120 @@
 import UIKit
 import SwiftyJSON
 
-class MainViewController: UIViewController{
-    @IBOutlet weak var partyNameLabel: UILabel!
-    //    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        return true
-//    }
-    
 
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        // How many rows we need
-//        return true
-//    }
+var songs:[UIImage] = []
+var songsJSON:[JSON] = []
+
+// SECOND CLASS FOR INDIVIDUAL CELLS IN THE TABLE VIEW
+class PlaylistTableViewCell: UITableViewCell {
+    
+// Initalizing the labels that display song name, artist and album image
+    @IBOutlet weak var albumImageLabel: UIImageView!
+    
+    @IBOutlet weak var ArtistNameLabel: UILabel!
+    
+    @IBOutlet weak var SongNameLabel: UILabel!
+  
+    
+    // Function to set the song data to the labels
+    func setPlaylistData(index: Int){
+        
+        
+        print(index)
+        SongNameLabel.text = songsJSON[index]["SongName"].stringValue
+        ArtistNameLabel.text = songsJSON[index]["SongArtists"].stringValue
+       // albumImageLabel.image = songs[index]
+        
+      
+
+    }
+ 
+}
+class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataSource{
+    @IBOutlet weak var tableView: UITableView!
+    // Function to show how many rows are needed
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return songsJSON.count
+    }
+    // Creates the indiviudal rows
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PlaylistTableViewCell
+        
+        // Goes to setPlaylistData function with the current index as parameter (e.g 2)
+        cell.setPlaylistData(index: indexPath.row)
+        
+        
+        return cell
+    }
+    
+    
+    // Label to show hosts party name e.g. Kaz's Party
+    @IBOutlet weak var partyNameLabel: UILabel!
+
     
     var partyData:JSON = ""
     
-   // @IBOutlet weak var Test: UILabel!
     override func viewDidLoad() {
-        print("NEW SCREEN")
+        songsJSON = partyData["Songs"].array!
+
+        //RetrieveImages()
         super.viewDidLoad()
         print(partyData)
-        print("finish")
-        
+        // Displays hosts party name
         self.partyNameLabel.text = partyData["HostName"].stringValue + "'s Party"
         
-       print( partyData["HostName"].stringValue)
+        // Tableview stuff idk
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        //Retrieves JSON with Song data and saves it into songsJSON
         
         
         
 
-        // Do any additional setup after loading the view.
+        
     }
    
+    func RetrieveImages(){
+        var i=0
+        while i<songsJSON.count-1{
+            let session = URLSession(configuration: .default)
+            
+            let getImageFromURL = session.dataTask(with:URL(string: songsJSON[i]["SongImageLink"].stringValue)!){ (data,response,error) in
+                if let e = error{
+                    print("Couldnt retrieve image\(e)")
+                }
+                else{
+                    if(response as? HTTPURLResponse) != nil{
+                        if let imageData = data{
+                            let image = UIImage(data: imageData)
+                            print(i)
+                            songs.insert(image!, at: i)
+                        }
+                        else{
+                            print("No image found")
+                        }
+                    }
+                    else{
+                        print("No reponse from server")
+                        
+                    }
+                }
+                
+            }
+            getImageFromURL.resume()
+            
+            
+            i = i + 1
+        }
+        
+        
+       
+        
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -47,14 +130,5 @@ class MainViewController: UIViewController{
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
