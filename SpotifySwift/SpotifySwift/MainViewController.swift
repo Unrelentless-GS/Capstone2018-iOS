@@ -24,10 +24,11 @@ class PlaylistTableViewCell: UITableViewCell {
     @IBOutlet weak var SongNameLabel: UILabel!
   
     
+    
+    
     // Function to set the song data to the labels
     func setPlaylistData(index: Int){
         
-        print(index)
         SongNameLabel.text = songsJSON[index]["SongName"].stringValue
         ArtistNameLabel.text = songsJSON[index]["SongArtists"].stringValue
         // Use SDWebImage to retrieve Images from URL, NOTE FOR LATER: NEED TO DELETE THE CACHE WHEN DEALING WITH MORE DATA
@@ -38,17 +39,26 @@ class PlaylistTableViewCell: UITableViewCell {
     }
  
 }
-class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataSource{
+class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate{
     @IBOutlet weak var tableView: UITableView!
+    
+    // Bool to see if the search bar is currently searching
+    var isSearching = false
+
+    var filteredData:[JSON] = []
     // Function to show how many rows are needed
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if isSearching{
+            return 0
+        }
         return songsJSON.count
     }
     // Creates the indiviudal rows
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PlaylistTableViewCell
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PlaylistTableViewCell
         
         // Goes to setPlaylistData function with the current index as parameter (e.g 2)
         cell.setPlaylistData(index: indexPath.row)
@@ -62,7 +72,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 
     @IBOutlet weak var partyNameTitle: UINavigationItem!
     var partyData:JSON = ""
-    
+
     override func viewDidLoad() {
         songsJSON = partyData["Songs"].array!
        // tableView.prefetchDataSource = self as! UITableViewDataSourcePrefetching
@@ -71,9 +81,13 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         super.viewDidLoad()
         print(partyData)
         // Displays hosts party name
-    
+        self.partyNameTitle.title = partyData["HostName"].stringValue + "'s Party"
+
+        searchBar.delegate = self
+        searchBar.returnKeyType = UIReturnKeyType.done
         
-            self.partyNameTitle.title = partyData["HostName"].stringValue + "'s Party"
+        
+        
         
         // Tableview stuff idk
         tableView.delegate = self
@@ -89,6 +103,23 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
    // SEARCH BAR
     @IBOutlet weak var searchBar: UISearchBar!
     
+    // Typing in the search bar clears the playlist
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        isSearching = true
+        
+    }
+    
+   
+    // Search bar searching functionality
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("SEARCHING...")
+        
+       print( searchBar.text!)
+        
+        
+        
+        
+    }
     
     
     
