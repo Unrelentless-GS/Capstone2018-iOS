@@ -27,14 +27,14 @@ class PlaylistTableViewCell: UITableViewCell {
     // Function to set the song data to the labels
     func setPlaylistData(index: Int){
         
-        
         print(index)
         SongNameLabel.text = songsJSON[index]["SongName"].stringValue
         ArtistNameLabel.text = songsJSON[index]["SongArtists"].stringValue
-       // albumImageLabel.image = songs[index]
+        // Use SDWebImage to retrieve Images from URL, NOTE FOR LATER: NEED TO DELETE THE CACHE WHEN DEALING WITH MORE DATA
+        albumImageLabel.sd_setImage(with: songsJSON[index]["SongImageLink"].url, completed: nil)
         
-      
 
+        
     }
  
 }
@@ -59,19 +59,21 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     
     // Label to show hosts party name e.g. Kaz's Party
-    @IBOutlet weak var partyNameLabel: UILabel!
 
-    
+    @IBOutlet weak var partyNameTitle: UINavigationItem!
     var partyData:JSON = ""
     
     override func viewDidLoad() {
         songsJSON = partyData["Songs"].array!
+       // tableView.prefetchDataSource = self as! UITableViewDataSourcePrefetching
 
         //RetrieveImages()
         super.viewDidLoad()
         print(partyData)
         // Displays hosts party name
-        self.partyNameLabel.text = partyData["HostName"].stringValue + "'s Party"
+    
+        
+            self.partyNameTitle.title = partyData["HostName"].stringValue + "'s Party"
         
         // Tableview stuff idk
         tableView.delegate = self
@@ -84,44 +86,10 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 
         
     }
-   
-    func RetrieveImages(){
-        var i=0
-        while i<songsJSON.count-1{
-            let session = URLSession(configuration: .default)
-            
-            let getImageFromURL = session.dataTask(with:URL(string: songsJSON[i]["SongImageLink"].stringValue)!){ (data,response,error) in
-                if let e = error{
-                    print("Couldnt retrieve image\(e)")
-                }
-                else{
-                    if(response as? HTTPURLResponse) != nil{
-                        if let imageData = data{
-                            let image = UIImage(data: imageData)
-                            print(i)
-                            songs.insert(image!, at: i)
-                        }
-                        else{
-                            print("No image found")
-                        }
-                    }
-                    else{
-                        print("No reponse from server")
-                        
-                    }
-                }
-                
-            }
-            getImageFromURL.resume()
-            
-            
-            i = i + 1
-        }
-        
-        
-       
-        
-    }
+   // SEARCH BAR
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    
     
     
     override func didReceiveMemoryWarning() {
@@ -132,3 +100,10 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 
 
 }
+
+//extension ViewController: UITableViewDataSourcePrefetching {
+//    public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+//        let urls = indexPaths.map { baseURL.appendingPathComponent(images[$0.row]) }
+//        SDWebImagePrefetcher.shared().prefetchURLs(urls)
+//    }
+//}
