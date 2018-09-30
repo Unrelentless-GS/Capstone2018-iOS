@@ -21,7 +21,6 @@
 		6E95BDEB2146421E008AB7DB /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E95BDD9214641F8008AB7DB /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E95BDEF2146AF87008AB7DB /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E95BDEE2146AF87008AB7DB /* MainViewController.swift */; };
 		6E95BE872146D58E008AB7DB /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E95BE792146D577008AB7DB /* SwiftyJSON.framework */; };
-		6E9A46D8215A3282003FEA44 /* PlaylistSongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9A46D7215A3282003FEA44 /* PlaylistSongCell.swift */; };
 		6E9A4727215A43F2003FEA44 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E9A4720215A43CF003FEA44 /* SDWebImage.framework */; };
 		6E9A4729215A446B003FEA44 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E9A4728215A446B003FEA44 /* ImageIO.framework */; };
 /* End PBXBuildFile section */
@@ -207,7 +206,6 @@
 		6E95BDCD214641F8008AB7DB /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		6E95BDEE2146AF87008AB7DB /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		6E95BE6D2146D577008AB7DB /* SwiftyJSON.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftyJSON.xcodeproj; path = SwiftyJSON/SwiftyJSON.xcodeproj; sourceTree = "<group>"; };
-		6E9A46D7215A3282003FEA44 /* PlaylistSongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSongCell.swift; sourceTree = "<group>"; };
 		6E9A4712215A43CF003FEA44 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
 		6E9A4728215A446B003FEA44 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -264,7 +262,6 @@
 				6E4719612144042F0046C5DE /* SpotifySwift-Bridging-Header.h */,
 				6E95BDCA21463ECE008AB7DB /* Info.plist */,
 				6E471965214405FB0046C5DE /* Constants.swift */,
-				6E9A46D7215A3282003FEA44 /* PlaylistSongCell.swift */,
 			);
 			path = SpotifySwift;
 			sourceTree = "<group>";
@@ -567,7 +564,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E47194D214403620046C5DE /* ViewController.swift in Sources */,
-				6E9A46D8215A3282003FEA44 /* PlaylistSongCell.swift in Sources */,
 				6E95BD1E21463852008AB7DB /* SpotifyAPIManager.swift in Sources */,
 				6E47194B214403620046C5DE /* AppDelegate.swift in Sources */,
 				6E471966214405FB0046C5DE /* Constants.swift in Sources */,

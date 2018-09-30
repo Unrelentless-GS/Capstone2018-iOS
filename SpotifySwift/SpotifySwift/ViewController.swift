@@ -19,7 +19,6 @@ class ViewController: UIViewController {
         if segue.destination is MainViewController
         {
             let vc = segue.destination as? MainViewController
-            vc?.partyData = "Arthur Dent"
         }
     }
     override func viewDidLoad() {
@@ -61,7 +60,6 @@ class ViewController: UIViewController {
         //Get the Auth code from URL
         //jukebox://?code=AQD6Zz5gaKeTKMYyMS...
         // Includes redirect uri and auth code
-        print(url)
         let components = NSURLComponents(url: url, resolvingAgainstBaseURL: false)
         
         // Remove everything to isolate authcode
@@ -80,13 +78,11 @@ class ViewController: UIViewController {
             
             
         ]
-        print("BEGIN",authCode,"AUTHCODE")
         
         Alamofire.request("https://spotify-jukebox.viljoen.industries/jukebox.php",method:.post, parameters:Hostparameters).responseJSON { (responseData) -> Void in
             if((responseData.result.value) != nil) {
                 let swiftyJsonVar = JSON(responseData.result.value!)
                 
-                print(swiftyJsonVar,"USER HASH!@#$")
                 
                //  Verification: If post request returns User Hash (Used to communicate with backend)
                 if (swiftyJsonVar["JUKE_MSG"].exists())
