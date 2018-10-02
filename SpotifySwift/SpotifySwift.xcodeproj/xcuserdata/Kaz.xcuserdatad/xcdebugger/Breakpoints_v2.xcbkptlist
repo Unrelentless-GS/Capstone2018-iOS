@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SpotifySwift/MainViewController.swift"
-            timestampString = "560174594.719568"
+            timestampString = "560180126.49807"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "368"
-            endingLineNumber = "368"
+            startingLineNumber = "398"
+            endingLineNumber = "398"
             landmarkName = "didTapAddSong(title:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SpotifySwift/MainViewController.swift"
-            timestampString = "560174594.720365"
+            timestampString = "560180126.498679"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
             landmarkName = "addSongBtn(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SpotifySwift/MainViewController.swift"
-            timestampString = "560174594.721056"
+            timestampString = "560180126.499115"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "295"
-            endingLineNumber = "295"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
             landmarkName = "didTapAddSong(title:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -154,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SpotifySwift/MainViewController.swift"
-            timestampString = "560174594.721495"
+            timestampString = "560180126.4995"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "320"
-            endingLineNumber = "320"
+            startingLineNumber = "350"
+            endingLineNumber = "350"
             landmarkName = "didTapAddSong(title:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -170,12 +170,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SpotifySwift/MainViewController.swift"
-            timestampString = "560174594.721898"
+            timestampString = "560180126.499853"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
-            landmarkName = "tableView(_:numberOfRowsInSection:)"
+            startingLineNumber = "263"
+            endingLineNumber = "263"
+            landmarkName = "update()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SpotifySwift/MainViewController.swift"
+            timestampString = "560180126.500162"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "265"
+            endingLineNumber = "265"
+            landmarkName = "update()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
