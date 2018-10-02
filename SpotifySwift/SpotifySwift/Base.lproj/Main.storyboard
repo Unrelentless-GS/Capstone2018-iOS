@@ -39,10 +39,19 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="searchDisplayController" destination="g4q-Q3-Lbr" id="XNU-yI-ZEp"/>
                         <segue destination="LSX-XB-ESx" kind="show" identifier="hostToJuke" id="i2O-yQ-5zA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="g4q-Q3-Lbr">
+                    <connections>
+                        <outlet property="delegate" destination="BYZ-38-t0r" id="vxJ-Ai-lEf"/>
+                        <outlet property="searchContentsController" destination="BYZ-38-t0r" id="vqy-tQ-hTW"/>
+                        <outlet property="searchResultsDataSource" destination="BYZ-38-t0r" id="mhK-zV-vSk"/>
+                        <outlet property="searchResultsDelegate" destination="BYZ-38-t0r" id="5wp-Bf-v8u"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="-25" y="108"/>
         </scene>
@@ -203,20 +212,10 @@
                     <connections>
                         <outlet property="partyNameTitle" destination="UEW-S9-Ltd" id="msX-Up-XBn"/>
                         <outlet property="searchBar" destination="gPI-t9-Td1" id="CPs-W5-YQ0"/>
-                        <outlet property="searchDisplayController" destination="0C1-dw-oh4" id="Ajj-7d-2YV"/>
                         <outlet property="tableView" destination="mcR-dR-UKP" id="MK3-SP-9jM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j1Y-4T-u7a" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="0C1-dw-oh4">
-                    <connections>
-                        <outlet property="delegate" destination="LSX-XB-ESx" id="KfR-w7-7gW"/>
-                        <outlet property="searchBar" destination="gPI-t9-Td1" id="NDc-II-MNl"/>
-                        <outlet property="searchContentsController" destination="LSX-XB-ESx" id="I1q-Oo-n9D"/>
-                        <outlet property="searchResultsDataSource" destination="LSX-XB-ESx" id="ygd-9R-94i"/>
-                        <outlet property="searchResultsDelegate" destination="LSX-XB-ESx" id="lx8-xQ-AT9"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="879.20000000000005" y="528.48575712143929"/>
         </scene>

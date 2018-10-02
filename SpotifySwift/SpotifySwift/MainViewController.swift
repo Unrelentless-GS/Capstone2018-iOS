@@ -27,13 +27,12 @@ class PlaylistTableViewCell: UITableViewCell {
     var delegate: PlaylistTableViewCellDelegate?
     
   
-    
+    var songID:String?
 
     
     
     @IBAction func addSongBtn(_ sender: Any) {
-       
-        delegate?.didTapAddSong(title: SongNameLabel.text!)
+        delegate?.didTapAddSong(title: songID!)
         
     }
     
@@ -46,15 +45,21 @@ class PlaylistTableViewCell: UITableViewCell {
     @IBOutlet weak var SongNameLabel: UILabel!
     
     func setResultsData(index: Int){
-  
         
+        songID=searchResults[index]["id"].stringValue
+        
+        addSongButton.isHidden = false
 
+        
         SongNameLabel.text = searchResults[index]["name"].stringValue
+        
+        
         ArtistNameLabel.text = searchResults[index]["artists"][0]["name"].stringValue
-
+        
         
         albumImageLabel.sd_setImage(with: searchResults[index]["album"]["images"][0]["url"].url, completed: nil)
 
+        
         print(searchResults[index]["artists"][0]["name"].stringValue)
         
         
@@ -79,6 +84,7 @@ class PlaylistTableViewCell: UITableViewCell {
 // MAIN JUKEBOX PLAYLIST PAGE
 class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate{
     @IBOutlet weak var tableView: UITableView!
+    
     // Bool to see if the search bar is currently searching
     var isSearching = false
     var SearchComplete = false
@@ -90,7 +96,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         if isSearching{
             return 0
         }
-        else if SearchComplete{
+        if SearchComplete == true{
             print(searchResults.count,"Search Complete")
             number = searchResults.count
             return searchResults.count
@@ -111,7 +117,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         
         // Goes to setPlaylistData function with the current index as parameter (e.g 2)
         
-        if SearchComplete{
+        if SearchComplete == true{
 
             
             cell.setResultsData(index: indexPath.row)
@@ -164,6 +170,9 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         userHash = partyData["UserHash"].stringValue
         
         // Tableview stuff idk
+        tableView.dataSource = self
+        
+
         tableView.delegate = self
        // tableView.dataSource = self
         
@@ -190,7 +199,6 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     func searchBarSearchButtonClicked(_ searchBar1: UISearchBar) {
         isSearching = false
       
-            SearchComplete = true
             // Post request parameters to search using Spotify
             let Hostparameters: Parameters = [
             "ImMobile": "ImMobile",
@@ -203,19 +211,23 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         // Post Request
         Alamofire.request("https://spotify-jukebox.viljoen.industries/search.php",method:.post, parameters:Hostparameters).responseJSON { (responseData) -> Void in
             if((responseData.result.value) != nil) {
-                let swiftyJsonVar = JSON(responseData.result.value!)
+                let swiftyJsonVar2 = JSON(responseData.result.value!)
                 
                 //  Verification: If post request returns User Hash (Used to communicate with backend)
-                if (swiftyJsonVar["tracks"].exists())
+                if (swiftyJsonVar2.exists())
                 {
 
                     DispatchQueue.main.async{
                         
                         if Thread.isMainThread{
                             print ("MAIN THREAD")
-                            searchResults = swiftyJsonVar["tracks"]["items"].array!
+                            searchResults = swiftyJsonVar2["tracks"]["items"].array!
                             print(searchResults[0])
+
                             self.refreshUI()
+                            self.SearchComplete = true
+
+
 
                         }
                         
@@ -227,7 +239,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                 }
                 else{
                     // If server authentication fails
-                    print(swiftyJsonVar.error)
+                    print(swiftyJsonVar2.error)
                 }
             }
             else
@@ -258,6 +270,101 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 }
 extension MainViewController: PlaylistTableViewCellDelegate{
     func didTapAddSong(title: String) {
+        
+        let Hostparameters: Parameters = [
+            "ImMobile": "ImMobile",
+            "Operation": "AddSong",
+            "SongSpotifyID": title,
+            "JukeboxCookie": userHash,
+            ]
+        
+        // Post Request
+        Alamofire.request("https://spotify-jukebox.viljoen.industries/update.php",method:.post, parameters:Hostparameters).responseJSON { (responseData) -> Void in
+            if((responseData.result.value) != nil) {
+                let swiftyJsonVar = JSON(responseData.result.value!)
+                
+                //  Verification: If post request returns User Hash (Used to communicate with backend)
+                if (swiftyJsonVar.exists())
+                {
+                    
+                    DispatchQueue.main.async{
+                        
+                        if Thread.isMainThread{
+                            print (swiftyJsonVar)
+                            //searchResults = swiftyJsonVar["tracks"]["items"].array!
+                            print(searchResults[0])
+                            //self.refreshUI()
+                        
+                            
+                            let HostparametersUpdate: Parameters = [
+                                "ImMobile": "ImMobile",
+                                "Operation": "UpdatePlaylist",
+                                "JukeboxCookie": self.userHash,
+                                ]
+                            
+                            // Post Request
+                            Alamofire.request("https://spotify-jukebox.viljoen.industries/update.php",method:.post, parameters:HostparametersUpdate).responseJSON { (responseData) -> Void in
+                                if((responseData.result.value) != nil) {
+                                    let swiftyJsonVar1 = JSON(responseData.result.value!)
+                                    print(swiftyJsonVar1)
+                                    //  Verification: If post request returns User Hash (Used to communicate with backend)
+                                    if (swiftyJsonVar1.exists())
+                                    {
+                                        
+                                        
+                                        DispatchQueue.main.async{
+                                            
+                                            if Thread.isMainThread{
+                                                print (swiftyJsonVar1)
+                                                songsJSON = swiftyJsonVar1["JUKE_MSG"].array!
+                                                print(songsJSON)
+                                                self.refreshUI()
+                                                
+                                                self.SearchComplete = false
+                                                
+                                            }
+                                            
+                                            
+                                        }
+                                        
+                                    }
+                                    else{
+                                        // If server authentication fails
+                                        print(swiftyJsonVar1.error)
+                                    }
+                                }
+                                else
+                                {
+                                    // If Post requests responds with nil
+                                    print(responseData.error)
+                                }
+                            }
+                            
+                            
+                        }
+                        
+                        
+                    }
+                    
+                }
+                else{
+                    // If server authentication fails
+                    print(swiftyJsonVar.error)
+                }
+            }
+            else
+            {
+                // If Post requests responds with nil
+                print(responseData.error)
+            }
+        }
+        
+        
+       
+        
+        
+        
+        
         print(title)
     }
 }
