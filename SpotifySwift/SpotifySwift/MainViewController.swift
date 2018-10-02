@@ -15,12 +15,30 @@ var songsJSON:[JSON] = []
 var searchResults:[JSON] = []
 var number = 0
 
-
+protocol PlaylistTableViewCellDelegate {
+    func didTapAddSong(title:String)
+    
+}
 
 // SECOND CLASS FOR INDIVIDUAL CELLS IN THE TABLE VIEW
 class PlaylistTableViewCell: UITableViewCell {
     
-// Initalizing the labels that display song name, artist and album image for each cell
+    @IBOutlet weak var addSongButton: UIButton!
+    var delegate: PlaylistTableViewCellDelegate?
+    
+  
+    
+
+    
+    
+    @IBAction func addSongBtn(_ sender: Any) {
+       
+        delegate?.didTapAddSong(title: SongNameLabel.text!)
+        
+    }
+    
+    
+    // Initalizing the labels that display song name, artist and album image for each cell
     @IBOutlet weak var albumImageLabel: UIImageView!
     
     @IBOutlet weak var ArtistNameLabel: UILabel!
@@ -28,16 +46,27 @@ class PlaylistTableViewCell: UITableViewCell {
     @IBOutlet weak var SongNameLabel: UILabel!
     
     func setResultsData(index: Int){
-        SongNameLabel.text = searchResults[index]["name"].stringValue
+  
+        
 
-        print(searchResults[index]["name"].stringValue)
+        SongNameLabel.text = searchResults[index]["name"].stringValue
+        ArtistNameLabel.text = searchResults[index]["artists"][0]["name"].stringValue
+
+        
+        albumImageLabel.sd_setImage(with: searchResults[index]["album"]["images"][0]["url"].url, completed: nil)
+
+        print(searchResults[index]["artists"][0]["name"].stringValue)
+        
+        
+        
+        
 
     }
     
   
     // Function to set the song data to the labels
     func setPlaylistData(index: Int){
-        
+        addSongButton.isHidden = true
         SongNameLabel.text = songsJSON[index]["SongName"].stringValue
         ArtistNameLabel.text = songsJSON[index]["SongArtists"].stringValue
         // Use SDWebImage to retrieve Images from URL, NOTE FOR LATER: NEED TO DELETE THE CACHE WHEN DEALING WITH MORE DATA
@@ -53,6 +82,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     // Bool to see if the search bar is currently searching
     var isSearching = false
     var SearchComplete = false
+
     var userHash:String = ""
     // Function to show how many rows are displayed on the table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -95,6 +125,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         }
         
         print(number)
+        cell.delegate = self as? PlaylistTableViewCellDelegate
         return cell
     }
     
@@ -105,16 +136,26 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     // partyData retrieves data when a user logs in : hosts name, songs already in playlist
     var partyData:JSON = ""
-    
+//    func initializebutton(){
+//        addSongBtn.layer.shadowColor = UIColor.black.cgColor
+//        addSongBtn.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+//        addSongBtn.layer.masksToBounds = false
+//        addSongBtn.layer.shadowRadius = 1.0
+//        addSongBtn.layer.shadowOpacity = 0.5
+//        addSongBtn.layer.cornerRadius = addSongBtn.frame.width / 2
+//    }
     override func viewDidLoad() {
-        songsJSON = partyData["Songs"].array!
+        if !partyData.isEmpty
+        {
+            songsJSON = partyData["Songs"].array!
+        }
        // tableView.prefetchDataSource = self as! UITableViewDataSourcePrefetching
-
+        
         //RetrieveImages()
         super.viewDidLoad()
         // Displays hosts party name
         self.partyNameTitle.title = partyData["HostName"].stringValue + "'s Party"
-
+        //initializebutton()
         // Search bar initialize stuff
        searchBar.delegate = self
        // searchBar.returnKeyType = UIReturnKeyType.done
@@ -147,9 +188,9 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
    
     // Search bar searching functionality
     func searchBarSearchButtonClicked(_ searchBar1: UISearchBar) {
-        self.isSearching = false
+        isSearching = false
       
-        self.SearchComplete = true
+            SearchComplete = true
             // Post request parameters to search using Spotify
             let Hostparameters: Parameters = [
             "ImMobile": "ImMobile",
@@ -170,11 +211,10 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 
                     DispatchQueue.main.async{
                         
-
                         if Thread.isMainThread{
                             print ("MAIN THREAD")
                             searchResults = swiftyJsonVar["tracks"]["items"].array!
-                            print("RELOAD")
+                            print(searchResults[0])
                             self.refreshUI()
 
                         }
@@ -212,7 +252,13 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+ 
 
 
 }
+extension MainViewController: PlaylistTableViewCellDelegate{
+    func didTapAddSong(title: String) {
+        print(title)
+    }
+}
+
