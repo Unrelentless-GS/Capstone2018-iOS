@@ -14,7 +14,6 @@ var songs:[UIImage] = []
 var songsJSON:[JSON] = []
 var searchResults:[JSON] = []
 var number = 0
-var count = 0
 
 protocol PlaylistTableViewCellDelegate {
     func didTapAddSong(title:String)
@@ -47,17 +46,26 @@ class PlaylistTableViewCell: UITableViewCell {
     
     func setResultsData(index: Int){
         
-        // Song ID is needed when we are adding a song to the database
         songID=searchResults[index]["id"].stringValue
-        // Show Button when search results are shown
+        
         addSongButton.isHidden = false
 
         
         SongNameLabel.text = searchResults[index]["name"].stringValue
         
+        
         ArtistNameLabel.text = searchResults[index]["artists"][0]["name"].stringValue
         
+        
         albumImageLabel.sd_setImage(with: searchResults[index]["album"]["images"][0]["url"].url, completed: nil)
+
+        
+        print(searchResults[index]["artists"][0]["name"].stringValue)
+        
+        
+        
+        
+
     }
     
   
@@ -68,6 +76,7 @@ class PlaylistTableViewCell: UITableViewCell {
         ArtistNameLabel.text = songsJSON[index]["SongArtists"].stringValue
         // Use SDWebImage to retrieve Images from URL, NOTE FOR LATER: NEED TO DELETE THE CACHE WHEN DEALING WITH MORE DATA
         albumImageLabel.sd_setImage(with: songsJSON[index]["SongImageLink"].url, completed: nil)
+        print(songsJSON[index]["SongName"].stringValue)
 
     }
  
@@ -76,15 +85,10 @@ class PlaylistTableViewCell: UITableViewCell {
 class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate{
     @IBOutlet weak var tableView: UITableView!
     
-    // TIMER TO UPDATE THE JUKEBOX
-
-
     // Bool to see if the search bar is currently searching
     var isSearching = false
     var SearchComplete = false
-   
-    
-    // User Hash
+
     var userHash:String = ""
     // Function to show how many rows are displayed on the table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -93,10 +97,14 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             return 0
         }
         if SearchComplete == true{
+            print(searchResults.count,"Search Complete")
+            number = searchResults.count
             return searchResults.count
         }
         else
         {
+        print("Normal", songsJSON.count)
+        number = songsJSON.count
         return songsJSON.count
         }
     }
@@ -122,6 +130,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 
         }
         
+        print(number)
         cell.delegate = self as? PlaylistTableViewCellDelegate
         return cell
     }
@@ -133,14 +142,20 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     // partyData retrieves data when a user logs in : hosts name, songs already in playlist
     var partyData:JSON = ""
-    var timer:Timer? = nil
-
+//    func initializebutton(){
+//        addSongBtn.layer.shadowColor = UIColor.black.cgColor
+//        addSongBtn.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+//        addSongBtn.layer.masksToBounds = false
+//        addSongBtn.layer.shadowRadius = 1.0
+//        addSongBtn.layer.shadowOpacity = 0.5
+//        addSongBtn.layer.cornerRadius = addSongBtn.frame.width / 2
+//    }
     override func viewDidLoad() {
-        // Verification: If a user hosts a party there wont be any songs in the jukebox
         if !partyData.isEmpty
         {
             songsJSON = partyData["Songs"].array!
         }
+       // tableView.prefetchDataSource = self as! UITableViewDataSourcePrefetching
         
         //RetrieveImages()
         super.viewDidLoad()
@@ -151,8 +166,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
        searchBar.delegate = self
        // searchBar.returnKeyType = UIReturnKeyType.done
         
-        timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(MainViewController.update), userInfo: nil, repeats: true)
-
+        
         userHash = partyData["UserHash"].stringValue
         
         // Tableview stuff idk
@@ -165,10 +179,10 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         //Retrieves JSON with Song data and saves it into songsJSON
         
         
-    
+        
+
+        
     }
-    
-    
    // SEARCH BAR
     @IBOutlet weak var searchBar: UISearchBar!
 
@@ -206,7 +220,9 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                     DispatchQueue.main.async{
                         
                         if Thread.isMainThread{
+                            print ("MAIN THREAD")
                             searchResults = swiftyJsonVar2["tracks"]["items"].array!
+                            print(searchResults[0])
 
                             self.refreshUI()
                             self.SearchComplete = true
@@ -236,52 +252,6 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         
         
        
-    }
-    
-    @objc func update(){
-        count  = count + 1
-        print(count)
-        let HostparametersUpdate: Parameters = [
-            "ImMobile": "ImMobile",
-            "Operation": "UpdatePlaylist",
-            "JukeboxCookie": self.userHash,
-            ]
-        
-        // Post Request
-        Alamofire.request("https://spotify-jukebox.viljoen.industries/update.php",method:.post, parameters:HostparametersUpdate).responseJSON { (responseData) -> Void in
-            if((responseData.result.value) != nil) {
-                let swiftyJsonVar = JSON(responseData.result.value!)
-                //  Verification: If post request returns User Hash (Used to communicate with backend)
-                if (swiftyJsonVar.exists())
-                {
-                    
-                    
-                    DispatchQueue.main.async{
-                        
-                        if Thread.isMainThread{
-                            //print (swiftyJsonVar1)
-                            songsJSON = swiftyJsonVar["JUKE_MSG"].array!
-                           // print(songsJSON)
-                            self.refreshUI()
-                            
-                            
-                        }
-                        
-                        
-                    }
-                    
-                }
-                else{
-                    // If server authentication fails
-                    print(swiftyJsonVar.error)
-                }
-            }
-            else
-            {
-                // If Post requests responds with nil
-                print(responseData.error)
-            }
-        }
     }
     
    func refreshUI() {
