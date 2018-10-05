@@ -69,7 +69,7 @@ class PlaylistTableViewCell: UITableViewCell {
         
 
     }
-    
+   
   
     // Function to set the song data to the labels
     func setPlaylistData(index: Int){
@@ -136,7 +136,13 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         cell.delegate = self as? PlaylistTableViewCellDelegate
         return cell
     }
-    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.text=""
+        SearchComplete = false
+        self.refreshUI()
+        searchBar.resignFirstResponder()
+    }
     
     // Label to show hosts party name e.g. Kaz's Party
 
@@ -146,20 +152,12 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     var partyData:JSON = ""
     var timer:Timer? = nil
 
-//    func initializebutton(){
-//        addSongBtn.layer.shadowColor = UIColor.black.cgColor
-//        addSongBtn.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
-//        addSongBtn.layer.masksToBounds = false
-//        addSongBtn.layer.shadowRadius = 1.0
-//        addSongBtn.layer.shadowOpacity = 0.5
-//        addSongBtn.layer.cornerRadius = addSongBtn.frame.width / 2
-//    }
+
     override func viewDidLoad() {
         if !partyData.isEmpty
         {
             songsJSON = partyData["Songs"].array!
         }
-       // tableView.prefetchDataSource = self as! UITableViewDataSourcePrefetching
         
         //RetrieveImages()
         super.viewDidLoad()
@@ -180,7 +178,6 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         
 
         tableView.delegate = self
-       // tableView.dataSource = self
         
         //Retrieves JSON with Song data and saves it into songsJSON
         
@@ -195,11 +192,13 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     // Typing in the search bar clears the playlist
    
     
-    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+
+    }
    
     // Search bar searching functionality
     func searchBarSearchButtonClicked(_ searchBar1: UISearchBar) {
-        searchBar.resignFirstResponder()
 
             // Post request parameters to search using Spotify
             let Hostparameters: Parameters = [
@@ -224,8 +223,6 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                         if Thread.isMainThread{
                             print ("MAIN THREAD")
                             searchResults = swiftyJsonVar2["tracks"]["items"].array!
-                            print(searchResults[0])
-
                             self.refreshUI()
                             self.SearchComplete = true
 
@@ -361,7 +358,8 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 }
 extension MainViewController: PlaylistTableViewCellDelegate{
     func didTapAddSong(title: String) {
-        
+        self.searchBar.setShowsCancelButton(false, animated: true)
+
         let Hostparameters: Parameters = [
             "ImMobile": "ImMobile",
             "Operation": "AddSong",
