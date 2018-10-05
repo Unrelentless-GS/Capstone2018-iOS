@@ -12,6 +12,8 @@ import Alamofire
 
 var songs:[UIImage] = []
 var songsJSON:[JSON] = []
+var currentlyPlayingJSON:[JSON] = []
+
 var searchResults:[JSON] = []
 var number = 0
 
@@ -26,11 +28,8 @@ class PlaylistTableViewCell: UITableViewCell {
     @IBOutlet weak var addSongButton: UIButton!
     var delegate: PlaylistTableViewCellDelegate?
     
-  
     var songID:String?
 
-    
-    
     @IBAction func addSongBtn(_ sender: Any) {
         delegate?.didTapAddSong(title: songID!)
         
@@ -42,6 +41,8 @@ class PlaylistTableViewCell: UITableViewCell {
     
     @IBOutlet weak var ArtistNameLabel: UILabel!
     
+    @IBOutlet weak var voteCount: UILabel!
+    
     @IBOutlet weak var SongNameLabel: UILabel!
     
     func setResultsData(index: Int){
@@ -49,6 +50,7 @@ class PlaylistTableViewCell: UITableViewCell {
         songID=searchResults[index]["id"].stringValue
         
         addSongButton.isHidden = false
+        voteCount.isHidden = true
 
         
         SongNameLabel.text = searchResults[index]["name"].stringValue
@@ -72,6 +74,9 @@ class PlaylistTableViewCell: UITableViewCell {
     // Function to set the song data to the labels
     func setPlaylistData(index: Int){
         addSongButton.isHidden = true
+        voteCount.text = songsJSON[index]["VoteCount"].stringValue
+
+        voteCount.isHidden = false
         SongNameLabel.text = songsJSON[index]["SongName"].stringValue
         ArtistNameLabel.text = songsJSON[index]["SongArtists"].stringValue
         // Use SDWebImage to retrieve Images from URL, NOTE FOR LATER: NEED TO DELETE THE CACHE WHEN DEALING WITH MORE DATA
@@ -86,16 +91,13 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     @IBOutlet weak var tableView: UITableView!
     
     // Bool to see if the search bar is currently searching
-    var isSearching = false
     var SearchComplete = false
 
     var userHash:String = ""
     // Function to show how many rows are displayed on the table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if isSearching{
-            return 0
-        }
+       
         if SearchComplete == true{
             print(searchResults.count,"Search Complete")
             number = searchResults.count
@@ -142,6 +144,8 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     // partyData retrieves data when a user logs in : hosts name, songs already in playlist
     var partyData:JSON = ""
+    var timer:Timer? = nil
+
 //    func initializebutton(){
 //        addSongBtn.layer.shadowColor = UIColor.black.cgColor
 //        addSongBtn.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
@@ -166,7 +170,9 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
        searchBar.delegate = self
        // searchBar.returnKeyType = UIReturnKeyType.done
         
-        
+
+        timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(MainViewController.update), userInfo: nil, repeats: true)
+
         userHash = partyData["UserHash"].stringValue
         
         // Tableview stuff idk
@@ -187,18 +193,14 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     @IBOutlet weak var searchBar: UISearchBar!
 
     // Typing in the search bar clears the playlist
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        isSearching = true
-
-        print("Begin Editing")
-    }
+   
     
     
    
     // Search bar searching functionality
     func searchBarSearchButtonClicked(_ searchBar1: UISearchBar) {
-        isSearching = false
-      
+        searchBar.resignFirstResponder()
+
             // Post request parameters to search using Spotify
             let Hostparameters: Parameters = [
             "ImMobile": "ImMobile",
@@ -230,12 +232,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 
 
                         }
-                        
-                        
                     }
-
-                    
-                   
                 }
                 else{
                     // If server authentication fails
@@ -249,9 +246,93 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             }
         }
         
-        
-        
+    }
+    
+
+    @objc func update(){
        
+        let HostparametersUpdate: Parameters = [
+            "ImMobile": "ImMobile",
+            "Operation": "UpdatePlaylist",
+            "JukeboxCookie": self.userHash,
+            ]
+        
+        // Post Request
+        Alamofire.request("https://spotify-jukebox.viljoen.industries/update.php",method:.post, parameters:HostparametersUpdate).responseJSON { (responseData) -> Void in
+            if((responseData.result.value) != nil) {
+                let swiftyJsonVar = JSON(responseData.result.value!)
+                //  Verification: If post request returns User Hash (Used to communicate with backend)
+                if (swiftyJsonVar.exists())
+                {
+                    
+                    
+                    DispatchQueue.main.async{
+                        
+                        if Thread.isMainThread{
+                            //print (swiftyJsonVar1)
+                            songsJSON = swiftyJsonVar["JUKE_MSG"].array!
+                           // print(songsJSON)
+                            self.refreshUI()
+                            
+                            
+                        }
+                        
+                        
+                    }
+                    
+                }
+                else{
+                    // If server authentication fails
+                    print(swiftyJsonVar.error)
+                }
+            }
+            else
+            {
+                // If Post requests responds with nil
+                print(responseData.error)
+            }
+        }
+        
+        let CurrentPlaybackparametersUpdate: Parameters = [
+            "ImMobile": "ImMobile",
+            "Operation": "CurrentlyPlaying",
+            "JukeboxCookie": self.userHash,
+            ]
+        
+        // Post Request
+        Alamofire.request("https://spotify-jukebox.viljoen.industries/update.php",method:.post, parameters:CurrentPlaybackparametersUpdate).responseJSON { (responseData) -> Void in
+            if((responseData.result.value) != nil) {
+                let swiftyJsonVar4 = JSON(responseData.result.value!)
+                //  Verification: If post request returns User Hash (Used to communicate with backend)
+                if (swiftyJsonVar4.exists())
+                {
+                  //  var test = swiftyJsonVar4["JUKE_MSG"].string
+                    DispatchQueue.main.async{
+                        
+                        if Thread.isMainThread{
+                          //  currentlyPlayingJSON = JSON(data: test)
+                            
+                           // print(currentlyPlayingJSON)
+                            self.refreshUI()
+                            
+                            
+                        }
+                        
+                        
+                    }
+                    
+                }
+                else{
+                    // If server authentication fails
+                    print(swiftyJsonVar4.error)
+                }
+            }
+            else
+            {
+                // If Post requests responds with nil
+                print(responseData.error)
+            }
+        }
     }
     
    func refreshUI() {
@@ -265,7 +346,17 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         // Dispose of any resources that can be recreated.
     }
  
-
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text == nil || searchBar.text == ""{
+            SearchComplete = false
+            tableView.reloadData()
+        }
+        
+        
+            
+        
+        
+    }
 
 }
 extension MainViewController: PlaylistTableViewCellDelegate{
