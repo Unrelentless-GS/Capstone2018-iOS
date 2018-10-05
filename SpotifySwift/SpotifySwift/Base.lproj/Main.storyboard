@@ -181,8 +181,15 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L68-cK-EYq">
+                                                    <rect key="frame" x="328" y="23" width="26" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z7S-fZ-4CL">
-                                                    <rect key="frame" x="314" y="11" width="46" height="30"/>
+                                                    <rect key="frame" x="314" y="18" width="46" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Button"/>
                                                     <connections>
@@ -196,6 +203,7 @@
                                             <outlet property="SongNameLabel" destination="6zn-S1-Ixv" id="ehR-xK-URL"/>
                                             <outlet property="addSongButton" destination="z7S-fZ-4CL" id="fZJ-2R-dly"/>
                                             <outlet property="albumImageLabel" destination="ZPN-7o-W87" id="SgR-B2-U1t"/>
+                                            <outlet property="voteCount" destination="L68-cK-EYq" id="ibf-Ca-5lT"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
