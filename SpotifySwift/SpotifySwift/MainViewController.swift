@@ -25,6 +25,8 @@ protocol PlaylistTableViewCellDelegate {
 // SECOND CLASS FOR INDIVIDUAL CELLS IN THE TABLE VIEW
 class PlaylistTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var downVoteBtn: UIButton!
+    @IBOutlet weak var upVoteBtn: UIButton!
     @IBOutlet weak var addSongButton: UIButton!
     var delegate: PlaylistTableViewCellDelegate?
     

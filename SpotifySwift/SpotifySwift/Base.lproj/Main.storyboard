@@ -262,6 +262,16 @@
                                                         <action selector="addSongBtn:" destination="SZD-Rj-Afo" eventType="touchUpInside" id="bnR-fW-4oO"/>
                                                     </connections>
                                                 </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Aa-Qw-SJD">
+                                                    <rect key="frame" x="354" y="18" width="39" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Down"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1yq-uS-XHE">
+                                                    <rect key="frame" x="268" y="18" width="30" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Up"/>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" red="0.11764705882352941" green="0.11764705882352941" blue="0.11764705882352941" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
@@ -275,6 +285,8 @@
                                             <outlet property="SongNameLabel" destination="6zn-S1-Ixv" id="ehR-xK-URL"/>
                                             <outlet property="addSongButton" destination="z7S-fZ-4CL" id="fZJ-2R-dly"/>
                                             <outlet property="albumImageLabel" destination="ZPN-7o-W87" id="SgR-B2-U1t"/>
+                                            <outlet property="downVoteBtn" destination="4Aa-Qw-SJD" id="WTK-YX-1sH"/>
+                                            <outlet property="upVoteBtn" destination="1yq-uS-XHE" id="h6v-pM-yX7"/>
                                             <outlet property="voteCount" destination="L68-cK-EYq" id="ibf-Ca-5lT"/>
                                         </connections>
                                     </tableViewCell>
