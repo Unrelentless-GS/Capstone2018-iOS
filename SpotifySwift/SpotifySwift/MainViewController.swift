@@ -17,20 +17,24 @@ var currentlyPlayingJSON:[JSON] = []
 var searchResults:[JSON] = []
 var number = 0
 
+
+
+
 protocol PlaylistTableViewCellDelegate {
     func didTapAddSong(title:String)
-    
+    func didTapVote(title:String, voted:String, direction: String)
 }
 
 // SECOND CLASS FOR INDIVIDUAL CELLS IN THE TABLE VIEW
 class PlaylistTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var downVoteBtn: UIButton!
-    @IBOutlet weak var upVoteBtn: UIButton!
+
+    @IBOutlet weak var upVoteButton: UIButton!
+    @IBOutlet weak var downVoteButton: UIButton!
     @IBOutlet weak var addSongButton: UIButton!
     var delegate: PlaylistTableViewCellDelegate?
-    
     var songID:String?
+    var alreadyVoted:String = ""
 
     @IBAction func addSongBtn(_ sender: Any) {
         delegate?.didTapAddSong(title: songID!)
@@ -38,9 +42,19 @@ class PlaylistTableViewCell: UITableViewCell {
     }
     
     
+    @IBAction func upVoteBtn(_ sender: Any) {
+        delegate?.didTapVote(title :songID!, voted:alreadyVoted,direction: "Up" )
+
+    }
+    
+    @IBAction func downVoteBtn(_ sender: Any) {
+        delegate?.didTapVote(title :songID!, voted:alreadyVoted, direction: "Down")
+
+    }
+    
     // Initalizing the labels that display song name, artist and album image for each cell
     @IBOutlet weak var albumImageLabel: UIImageView!
-    
+
     @IBOutlet weak var ArtistNameLabel: UILabel!
     
     @IBOutlet weak var voteCount: UILabel!
@@ -48,12 +62,13 @@ class PlaylistTableViewCell: UITableViewCell {
     @IBOutlet weak var SongNameLabel: UILabel!
     
     func setResultsData(index: Int){
-        
+        upVoteButton.isHidden = true
+        downVoteButton.isHidden = true
         songID=searchResults[index]["id"].stringValue
         
         addSongButton.isHidden = false
+        
         voteCount.isHidden = true
-
         
         SongNameLabel.text = searchResults[index]["name"].stringValue
         
@@ -64,26 +79,25 @@ class PlaylistTableViewCell: UITableViewCell {
         albumImageLabel.sd_setImage(with: searchResults[index]["album"]["images"][0]["url"].url, completed: nil)
 
         
-        print(searchResults[index]["artists"][0]["name"].stringValue)
         
-        
-        
-        
-
+    
     }
    
   
     // Function to set the song data to the labels
     func setPlaylistData(index: Int){
         addSongButton.isHidden = true
+        upVoteButton.isHidden = false
+        downVoteButton.isHidden = false
         voteCount.text = songsJSON[index]["VoteCount"].stringValue
-
+       
         voteCount.isHidden = false
         SongNameLabel.text = songsJSON[index]["SongName"].stringValue
+        songID = songsJSON[index]["SongSpotifyID"].stringValue
+
         ArtistNameLabel.text = songsJSON[index]["SongArtists"].stringValue
         // Use SDWebImage to retrieve Images from URL, NOTE FOR LATER: NEED TO DELETE THE CACHE WHEN DEALING WITH MORE DATA
         albumImageLabel.sd_setImage(with: songsJSON[index]["SongImageLink"].url, completed: nil)
-        print(songsJSON[index]["SongName"].stringValue)
 
     }
  
@@ -94,20 +108,31 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     // Bool to see if the search bar is currently searching
     var SearchComplete = false
-
+    
+    // Label to show hosts party name e.g. Kaz's Party
+    @IBOutlet weak var partyNameTitle: UINavigationItem!
+    
+    // Labels and Buttons for Currently Playing
+    @IBOutlet weak var playingSongName: UILabel!
+    @IBOutlet weak var playingSongArtist: UILabel!
+    @IBOutlet weak var playingSongImage: UIImageView!
+    @IBOutlet weak var startPartyButton: UIButton!
+    
+    
+    var partyData:JSON = ""
+    var timer:Timer? = nil
+    
+    // User Hash
     var userHash:String = ""
     // Function to show how many rows are displayed on the table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-       
+
         if SearchComplete == true{
-            print(searchResults.count,"Search Complete")
             number = searchResults.count
             return searchResults.count
         }
         else
         {
-        print("Normal", songsJSON.count)
         number = songsJSON.count
         return songsJSON.count
         }
@@ -115,26 +140,17 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     // Creates the indiviudal rows
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
 
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PlaylistTableViewCell
-        
-        // Goes to setPlaylistData function with the current index as parameter (e.g 2)
-        
+    
         if SearchComplete == true{
-
-            
             cell.setResultsData(index: indexPath.row)
-
-            //text  = searchResults[indexPath.row]["name"].string
         }
         else
         {
            cell.setPlaylistData(index: indexPath.row)
-
         }
         
-        print(number)
         cell.delegate = self as? PlaylistTableViewCellDelegate
         return cell
     }
@@ -146,13 +162,10 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         searchBar.resignFirstResponder()
     }
     
-    // Label to show hosts party name e.g. Kaz's Party
-
-    @IBOutlet weak var partyNameTitle: UINavigationItem!
+    
     
     // partyData retrieves data when a user logs in : hosts name, songs already in playlist
-    var partyData:JSON = ""
-    var timer:Timer? = nil
+ 
 
 
     override func viewDidLoad() {
@@ -160,46 +173,33 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         {
             songsJSON = partyData["Songs"].array!
         }
-        
+        update()
         //RetrieveImages()
         super.viewDidLoad()
         // Displays hosts party name
         self.partyNameTitle.title = partyData["HostName"].stringValue + "'s Party"
-        //initializebutton()
-        // Search bar initialize stuff
        searchBar.delegate = self
-       // searchBar.returnKeyType = UIReturnKeyType.done
         
-
         timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(MainViewController.update), userInfo: nil, repeats: true)
 
         userHash = partyData["UserHash"].stringValue
         
         // Tableview stuff idk
         tableView.dataSource = self
-        
-
+    
         tableView.delegate = self
-        
-        //Retrieves JSON with Song data and saves it into songsJSON
-        
-        
-        
-
         
     }
    // SEARCH BAR
     @IBOutlet weak var searchBar: UISearchBar!
 
-    // Typing in the search bar clears the playlist
-   
-    
+
+    // Shows cancel button when searching
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
-
     }
    
-    // Search bar searching functionality
+    // SEARCHING: Post request to get data and displays on table view
     func searchBarSearchButtonClicked(_ searchBar1: UISearchBar) {
 
             // Post request parameters to search using Spotify
@@ -219,19 +219,12 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                 //  Verification: If post request returns User Hash (Used to communicate with backend)
                 if (swiftyJsonVar2.exists())
                 {
-
-                    DispatchQueue.main.async{
-                        
-                        if Thread.isMainThread{
-                            print ("MAIN THREAD")
+                    
                             searchResults = swiftyJsonVar2["tracks"]["items"].array!
                             self.refreshUI()
                             self.SearchComplete = true
-
-
-
-                        }
-                    }
+                    
+                    
                 }
                 else{
                     // If server authentication fails
@@ -249,7 +242,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
 
     @objc func update(){
-       
+
         let HostparametersUpdate: Parameters = [
             "ImMobile": "ImMobile",
             "Operation": "UpdatePlaylist",
@@ -268,15 +261,9 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                     DispatchQueue.main.async{
                         
                         if Thread.isMainThread{
-                            //print (swiftyJsonVar1)
                             songsJSON = swiftyJsonVar["JUKE_MSG"].array!
-                           // print(songsJSON)
                             self.refreshUI()
-                            
-                            
                         }
-                        
-                        
                     }
                     
                 }
@@ -305,21 +292,16 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                 //  Verification: If post request returns User Hash (Used to communicate with backend)
                 if (swiftyJsonVar4.exists())
                 {
-                  //  var test = swiftyJsonVar4["JUKE_MSG"].string
-                    DispatchQueue.main.async{
-                        
-                        if Thread.isMainThread{
-                          //  currentlyPlayingJSON = JSON(data: test)
-                            
-                           // print(currentlyPlayingJSON)
-                            self.refreshUI()
-                            
-                            
-                        }
-                        
-                        
-                    }
+                   var jsonString = swiftyJsonVar4["JUKE_MSG"].rawString()!
+                    let responseJSON = jsonString.data(using: String.Encoding.utf8).flatMap({try? JSON(data: $0)}) ?? JSON(NSNull())
                     
+                    self.playingSongName.text = responseJSON["item"]["name"].rawString()!
+                    
+                    self.playingSongArtist.text=responseJSON["item"]["artists"][0]["name"].rawString()!
+                    
+                    self.playingSongImage.sd_setImage(with: responseJSON["item"]["album"]["images"][0]["url"].url, completed: nil)
+                    
+                    self.refreshUI()
                 }
                 else{
                     // If server authentication fails
@@ -359,6 +341,10 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 
 }
 extension MainViewController: PlaylistTableViewCellDelegate{
+ 
+    
+
+    
     func didTapAddSong(title: String) {
         self.searchBar.setShowsCancelButton(false, animated: true)
 
@@ -450,13 +436,69 @@ extension MainViewController: PlaylistTableViewCellDelegate{
             }
         }
         
+        }
+    
+    func didTapVote(title: String, voted:String, direction: String) {
+        print("upvote")
         
-       
+        var value:Int = 0
+        // if upvoted (voted== up) & direction is up == 0
+        // if upvoted (voted== up) & direction is down == -1
+        // if nill (voted == up) & direction is up == 1
+        //
+        
+        
+        
+        if(voted == "Up" && direction == "Up")
+        {
+            value = 0
+        }
+        else if (voted == "Up" && direction == "Down")
+        {
+            value = -1
+        }
+        else if(voted == "Down" && direction == "Up")
+        {
+            value = 1
+        }
+        else if(voted == "Down" && direction == "Down")
+        {
+            value = 0
+        }
+        else if(voted == "" && direction == "Up")
+        {
+            value = 1
+        }
+        else if(voted=="" && direction == "Down")
+        {
+            value = -1
+        }
+        print(value)
         
         
         
         
-        print(title)
+        
+        let Hostparameters: Parameters = [
+            "ImMobile": "ImMobile",
+            "Operation": "Voting",
+            "SongID": title,
+            //"Value":,
+            
+            "JukeboxCookie": userHash,
+            
+            ]
+        
+        
+        
+        
+        
     }
+
+
+    
+
+    
+    
 }
 
