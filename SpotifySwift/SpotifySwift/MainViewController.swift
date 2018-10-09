@@ -19,10 +19,9 @@ var number = 0
 
 
 
-
 protocol PlaylistTableViewCellDelegate {
     func didTapAddSong(title:String)
-    func didTapVote(title:String, voted:String, direction: String)
+    func didTapVote(title:JSON, voted:String, direction: String)
 }
 
 // SECOND CLASS FOR INDIVIDUAL CELLS IN THE TABLE VIEW
@@ -31,10 +30,13 @@ class PlaylistTableViewCell: UITableViewCell {
 
     @IBOutlet weak var upVoteButton: UIButton!
     @IBOutlet weak var downVoteButton: UIButton!
+    
     @IBOutlet weak var addSongButton: UIButton!
     var delegate: PlaylistTableViewCellDelegate?
-    var songID:String?
     var alreadyVoted:String = ""
+    var songID:String?
+    var ID:Int = 0
+
 
     @IBAction func addSongBtn(_ sender: Any) {
         delegate?.didTapAddSong(title: songID!)
@@ -43,12 +45,12 @@ class PlaylistTableViewCell: UITableViewCell {
     
     
     @IBAction func upVoteBtn(_ sender: Any) {
-        delegate?.didTapVote(title :songID!, voted:alreadyVoted,direction: "Up" )
+        delegate?.didTapVote(title :songsJSON[ID], voted:alreadyVoted,direction: "Up" )
 
     }
     
     @IBAction func downVoteBtn(_ sender: Any) {
-        delegate?.didTapVote(title :songID!, voted:alreadyVoted, direction: "Down")
+        delegate?.didTapVote(title :songsJSON[ID], voted:alreadyVoted, direction: "Down")
 
     }
     
@@ -86,6 +88,7 @@ class PlaylistTableViewCell: UITableViewCell {
   
     // Function to set the song data to the labels
     func setPlaylistData(index: Int){
+        ID = index
         addSongButton.isHidden = true
         upVoteButton.isHidden = false
         downVoteButton.isHidden = false
@@ -117,6 +120,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     @IBOutlet weak var playingSongArtist: UILabel!
     @IBOutlet weak var playingSongImage: UIImageView!
     @IBOutlet weak var startPartyButton: UIButton!
+    var isPlaying = false
     
     
     var partyData:JSON = ""
@@ -135,6 +139,13 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         {
         number = songsJSON.count
         return songsJSON.count
+        }
+    }
+    // Adds song to jukebox when cell is clicked
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if(SearchComplete)
+        {
+            didTapAddSong(title: searchResults[indexPath.row]["id"].stringValue)
         }
     }
     
@@ -166,8 +177,6 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     // partyData retrieves data when a user logs in : hosts name, songs already in playlist
  
-
-
     override func viewDidLoad() {
         if !partyData.isEmpty
         {
@@ -257,7 +266,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                 if (swiftyJsonVar.exists())
                 {
                     
-                    
+
                     DispatchQueue.main.async{
                         
                         if Thread.isMainThread{
@@ -288,24 +297,35 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         // Post Request
         Alamofire.request("https://spotify-jukebox.viljoen.industries/update.php",method:.post, parameters:CurrentPlaybackparametersUpdate).responseJSON { (responseData) -> Void in
             if((responseData.result.value) != nil) {
-                let swiftyJsonVar4 = JSON(responseData.result.value!)
+                let swiftyJsonVar = JSON(responseData.result.value!)
                 //  Verification: If post request returns User Hash (Used to communicate with backend)
-                if (swiftyJsonVar4.exists())
+                if (swiftyJsonVar.exists())
                 {
-                   var jsonString = swiftyJsonVar4["JUKE_MSG"].rawString()!
+                   var jsonString = swiftyJsonVar["JUKE_MSG"].rawString()!
                     let responseJSON = jsonString.data(using: String.Encoding.utf8).flatMap({try? JSON(data: $0)}) ?? JSON(NSNull())
-                    
                     self.playingSongName.text = responseJSON["item"]["name"].rawString()!
                     
                     self.playingSongArtist.text=responseJSON["item"]["artists"][0]["name"].rawString()!
                     
                     self.playingSongImage.sd_setImage(with: responseJSON["item"]["album"]["images"][0]["url"].url, completed: nil)
                     
+                    self.isPlaying = responseJSON["is_playing"].boolValue
+                    if(self.isPlaying)
+                    {
+                        self.startPartyButton.setTitle("Pause", for: .normal)
+                    }
+                    else
+                    {
+                        self.startPartyButton.setTitle("Play", for: .normal)
+
+                    }
+                    
+                    print("Is song Playing?: ",self.isPlaying)
                     self.refreshUI()
                 }
                 else{
                     // If server authentication fails
-                    print(swiftyJsonVar4.error)
+                    print(swiftyJsonVar.error)
                 }
             }
             else
@@ -335,7 +355,6 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         
         
             
-        
         
     }
 
@@ -367,7 +386,6 @@ extension MainViewController: PlaylistTableViewCellDelegate{
                     DispatchQueue.main.async{
                         
                         if Thread.isMainThread{
-                            print (swiftyJsonVar)
                             //searchResults = swiftyJsonVar["tracks"]["items"].array!
                             print(searchResults[0])
                             //self.refreshUI()
@@ -394,7 +412,6 @@ extension MainViewController: PlaylistTableViewCellDelegate{
                                             if Thread.isMainThread{
                                                 print (swiftyJsonVar1)
                                                 songsJSON = swiftyJsonVar1["JUKE_MSG"].array!
-                                                print(songsJSON)
                                                 self.refreshUI()
                                                 
                                                 self.SearchComplete = false
@@ -438,58 +455,94 @@ extension MainViewController: PlaylistTableViewCellDelegate{
         
         }
     
-    func didTapVote(title: String, voted:String, direction: String) {
+    func didTapVote(title: JSON, voted:String, direction: String) {
         print("upvote")
         
         var value:Int = 0
+        let yourVote = title["YourVote"].intValue
+        
         // if upvoted (voted== up) & direction is up == 0
         // if upvoted (voted== up) & direction is down == -1
-        // if nill (voted == up) & direction is up == 1
+        // if nill (voted =="") & direction is up == 1
         //
         
-        
-        
-        if(voted == "Up" && direction == "Up")
-        {
-            value = 0
-        }
-        else if (voted == "Up" && direction == "Down")
-        {
-            value = -1
-        }
-        else if(voted == "Down" && direction == "Up")
+        print(yourVote)
+        if (yourVote == 0 && direction == "Up")
         {
             value = 1
         }
-        else if(voted == "Down" && direction == "Down")
-        {
-            value = 0
-        }
-        else if(voted == "" && direction == "Up")
-        {
-            value = 1
-        }
-        else if(voted=="" && direction == "Down")
+        else if (yourVote == 0 && direction == "Down")
         {
             value = -1
         }
+        else if (yourVote == 1 && direction == "Up")
+        {
+            value = 0
+        }
+        else  if (yourVote == 1 && direction == "Down")
+        {
+            value = -1
+        }
+        else  if (yourVote == -1 && direction == "Down")
+        {
+            value = 0
+        }
+        else if (yourVote == -1 && direction == "Up")
+        {
+            value = 1
+        }
+        
+        
+        
+        
+        
+        //print(title)
         print(value)
-        
+ 
+        print(title["SongSpotifyID"].stringValue)
         
         
         
         
         let Hostparameters: Parameters = [
             "ImMobile": "ImMobile",
-            "Operation": "Voting",
-            "SongID": title,
-            //"Value":,
-            
+            "Action": "Voting",
+            "SongID": title["SongID"].stringValue,
+            "Value":value,
             "JukeboxCookie": userHash,
             
             ]
         
-        
+        Alamofire.request("https://spotify-jukebox.viljoen.industries/vote.php",method:.post, parameters:Hostparameters).responseJSON { (responseData) -> Void in
+            if((responseData.result.value) != nil) {
+                let swiftyJsonVar1 = JSON(responseData.result.value!)
+                print(swiftyJsonVar1)
+                //  Verification: If post request returns User Hash (Used to communicate with backend)
+                if (swiftyJsonVar1.exists())
+                {
+                    
+                    
+    
+                            
+                            self.update()
+                            
+                            
+                            
+                        
+                
+                    
+                }
+                else{
+                    // If server authentication fails
+                    print(swiftyJsonVar1.error)
+                }
+            }
+            else
+            {
+                // If Post requests responds with nil
+                print(responseData.error)
+            }
+        }
         
         
         

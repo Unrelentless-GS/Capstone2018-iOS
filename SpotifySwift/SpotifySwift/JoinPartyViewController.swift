@@ -60,6 +60,7 @@ class JoinPartyViewController: UIViewController {
                 ]
             
             Alamofire.request("https://spotify-jukebox.viljoen.industries/join.php",method:.post, parameters:Joinparameters).responseJSON { (responseData) -> Void in
+                print(responseData.result.value)
                 if((responseData.result.value) != nil) {
                     let swiftyJsonVar = JSON(responseData.result.value!)
                     
