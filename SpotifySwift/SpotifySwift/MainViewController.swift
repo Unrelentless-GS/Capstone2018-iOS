@@ -109,6 +109,7 @@ class PlaylistTableViewCell: UITableViewCell {
 class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate{
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var navBar: UINavigationItem!
     // Bool to see if the search bar is currently searching
     var SearchComplete = false
     
@@ -183,10 +184,17 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             songsJSON = partyData["Songs"].array!
         }
         update()
+        self.navigationItem.setHidesBackButton(true, animated:true);
+
+         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        let backItem = UIBarButtonItem()
+        backItem.title = "Back"
+        navBar.backBarButtonItem = backItem
         //RetrieveImages()
         super.viewDidLoad()
         // Displays hosts party name
-        self.partyNameTitle.title = partyData["HostName"].stringValue + "'s Party"
+        self.navBar.title = partyData["HostName"].stringValue + "'s Party"
+        //self.partyNameTitle.title = partyData["HostName"].stringValue + "'s Party"
        searchBar.delegate = self
         
         timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(MainViewController.update), userInfo: nil, repeats: true)

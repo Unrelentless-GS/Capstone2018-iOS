@@ -21,6 +21,8 @@ class JoinPartyViewController: UIViewController {
     var partyData:JSON = ""
 
     override func viewDidLoad() {
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+
         super.viewDidLoad()
 
         //Disable auto correct for input values

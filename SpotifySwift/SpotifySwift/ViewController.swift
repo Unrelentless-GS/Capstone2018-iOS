@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     
     var partyData:String = ""
 
+    @IBOutlet weak var navBar: UINavigationItem!
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
         if segue.destination is MainViewController
@@ -22,13 +23,20 @@ class ViewController: UIViewController {
         }
     }
     override func viewDidLoad() {
+        
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
     @IBAction func joinPartyButton(_ sender: UIButton) {
-        let NextView = self.storyboard?.instantiateViewController(withIdentifier: "loginView") as! JoinPartyViewController
-        self.present(NextView, animated: true, completion: nil)
+       // let NextView = self.storyboard?.instantiateViewController(withIdentifier: "loginView") as! JoinPartyViewController
+        //self.present(NextView, animated: true, completion: nil)
     }
     
     @IBAction func LoginButton(_ sender: UIButton) {
