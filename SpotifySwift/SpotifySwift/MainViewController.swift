@@ -38,6 +38,7 @@ class PlaylistTableViewCell: UITableViewCell {
     var ID:Int = 0
 
 
+
     @IBAction func addSongBtn(_ sender: Any) {
         delegate?.didTapAddSong(title: songID!)
         
@@ -74,9 +75,7 @@ class PlaylistTableViewCell: UITableViewCell {
         
         SongNameLabel.text = searchResults[index]["name"].stringValue
         
-        
         ArtistNameLabel.text = searchResults[index]["artists"][0]["name"].stringValue
-        
         
         albumImageLabel.sd_setImage(with: searchResults[index]["album"]["images"][0]["url"].url, completed: nil)
 
@@ -112,7 +111,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     @IBOutlet weak var navBar: UINavigationItem!
     // Bool to see if the search bar is currently searching
     var SearchComplete = false
-    
+    var hostName = ""
     // Label to show hosts party name e.g. Kaz's Party
     @IBOutlet weak var partyNameTitle: UINavigationItem!
     
@@ -122,7 +121,8 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     @IBOutlet weak var playingSongImage: UIImageView!
     @IBOutlet weak var startPartyButton: UIButton!
     var isPlaying = false
-    
+    var roomCode:String = ""
+
     
     var partyData:JSON = ""
     var timer:Timer? = nil
@@ -193,8 +193,15 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         //RetrieveImages()
         super.viewDidLoad()
         // Displays hosts party name
-        self.navBar.title = partyData["HostName"].stringValue + "'s Party"
-        //self.partyNameTitle.title = partyData["HostName"].stringValue + "'s Party"
+        if (hostName == "")
+        {
+            self.navBar.title = partyData["HostName"].stringValue + "'s Party"
+        }
+        else
+        {
+            self.navBar.title = hostName + "'s Party"
+        }
+        
        searchBar.delegate = self
         
         timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(MainViewController.update), userInfo: nil, repeats: true)
@@ -311,6 +318,8 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                 {
                    var jsonString = swiftyJsonVar["JUKE_MSG"].rawString()!
                     let responseJSON = jsonString.data(using: String.Encoding.utf8).flatMap({try? JSON(data: $0)}) ?? JSON(NSNull())
+                    
+                    print(responseJSON)
                     self.playingSongName.text = responseJSON["item"]["name"].rawString()!
                     
                     self.playingSongArtist.text=responseJSON["item"]["artists"][0]["name"].rawString()!
@@ -329,6 +338,14 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                     }
                     
                     print("Is song Playing?: ",self.isPlaying)
+                    if (!self.isPlaying)
+                    {
+                        self.playingSongName.text = "Not Playing"
+                        
+                        self.playingSongArtist.text = ""
+                    }
+                    
+                    
                     self.refreshUI()
                 }
                 else{
@@ -369,9 +386,6 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 }
 extension MainViewController: PlaylistTableViewCellDelegate{
  
-    
-
-    
     func didTapAddSong(title: String) {
         self.searchBar.setShowsCancelButton(false, animated: true)
 
@@ -447,7 +461,7 @@ extension MainViewController: PlaylistTableViewCellDelegate{
                         
                         
                     }
-                    
+        
                 }
                 else{
                     // If server authentication fails
@@ -469,11 +483,8 @@ extension MainViewController: PlaylistTableViewCellDelegate{
         var value:Int = 0
         let yourVote = title["YourVote"].intValue
         
-        // if upvoted (voted== up) & direction is up == 0
-        // if upvoted (voted== up) & direction is down == -1
-        // if nill (voted =="") & direction is up == 1
-        //
-        
+      
+        // Upvote/Downvote
         print(yourVote)
         if (yourVote == 0 && direction == "Up")
         {
@@ -501,16 +512,8 @@ extension MainViewController: PlaylistTableViewCellDelegate{
         }
         
         
-        
-        
-        
-        //print(title)
-        print(value)
- 
+    
         print(title["SongSpotifyID"].stringValue)
-        
-        
-        
         
         let Hostparameters: Parameters = [
             "ImMobile": "ImMobile",
@@ -529,15 +532,7 @@ extension MainViewController: PlaylistTableViewCellDelegate{
                 if (swiftyJsonVar1.exists())
                 {
                     
-                    
-    
-                            
-                            self.update()
-                            
-                            
-                            
-                        
-                
+                    self.update()
                     
                 }
                 else{

@@ -11,15 +11,18 @@ import Alamofire
 import SwiftyJSON
 
 class ViewController: UIViewController {
-    
+    var authCode = ""
+
     var partyData:String = ""
 
     @IBOutlet weak var navBar: UINavigationItem!
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        if segue.destination is MainViewController
+        if segue.destination is HostPartyViewController
         {
-            let vc = segue.destination as? MainViewController
+            let vc = segue.destination as? HostPartyViewController
+            vc?.authCode = self.authCode
+
         }
     }
     override func viewDidLoad() {
@@ -71,44 +74,17 @@ class ViewController: UIViewController {
         let components = NSURLComponents(url: url, resolvingAgainstBaseURL: false)
         
         // Remove everything to isolate authcode
-        var authCode = ""
         if let range = components?.query?.range(of: "code=") {
             authCode = String((components?.query![range.upperBound...])!)
         }
        
-    
+        self.performSegue(withIdentifier: "hostToJuke", sender:nil)
+
         
         // POST REQUEST TO SEND AUTH CODE TO CREATE PARTY
-        let Hostparameters: Parameters = [
-            "ImMobile": "ImMobile",
-            "Code": authCode,
-            "HostNickname": "TestNickName",
-            
-            
-        ]
+       
         
-        Alamofire.request("https://spotify-jukebox.viljoen.industries/jukebox.php",method:.post, parameters:Hostparameters).responseJSON { (responseData) -> Void in
-            if((responseData.result.value) != nil) {
-                let swiftyJsonVar = JSON(responseData.result.value!)
-                
-                
-               //  Verification: If post request returns User Hash (Used to communicate with backend)
-                if (swiftyJsonVar["JUKE_MSG"].exists())
-                {
-                    self.performSegue(withIdentifier: "hostToJuke", sender:nil)
-
-                }
-                else{
-                    // If server authentication fails
-                       print(swiftyJsonVar.error)
-                }
-            }
-            else
-            {
-                // If Post requests responds with nil
-               print(responseData.error)
-            }
-        }
+       
     
     }
     

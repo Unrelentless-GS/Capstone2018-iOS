@@ -19,6 +19,7 @@ class JoinPartyViewController: UIViewController {
     @IBOutlet weak var r_codeTextField: UITextField!
     
     var partyData:JSON = ""
+    var roomCode:String = ""
 
     override func viewDidLoad() {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -39,6 +40,7 @@ class JoinPartyViewController: UIViewController {
         {
             let vc = segue.destination as? MainViewController
             vc?.partyData = self.partyData
+            vc?.roomCode = self.roomCode
         }
     }
     
@@ -73,6 +75,7 @@ class JoinPartyViewController: UIViewController {
                     
                     if(swiftyJsonVar["JUKE_MSG"]["UserHash"].exists())
                     {
+                        self.roomCode = self.r_codeTextField.text!
                         self.partyData = swiftyJsonVar["JUKE_MSG"]
                         self.performSegue(withIdentifier: "joinPartySegue", sender:nil)
                         print(swiftyJsonVar,"USER HASH!@#$")
