@@ -343,9 +343,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iU4-2R-DKT">
-                                <rect key="frame" x="348" y="690" width="46" height="26"/>
+                                <rect key="frame" x="348" y="690" width="46" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Play"/>
+                                <connections>
+                                    <segue destination="IPF-Q2-pu6" kind="show" identifier="toDevices" id="sVB-YR-ou0"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8XY-Qh-dLX">
                                 <rect key="frame" x="80" y="679" width="234" height="21"/>
@@ -380,11 +383,12 @@
                         <outlet property="startPartyButton" destination="iU4-2R-DKT" id="Ce6-eh-zi6"/>
                         <outlet property="tableView" destination="mcR-dR-UKP" id="MK3-SP-9jM"/>
                         <segue destination="1vv-94-K5x" kind="show" id="kgC-L7-HUa"/>
+                        <segue destination="IPF-Q2-pu6" kind="show" id="AP6-bW-w3H"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j1Y-4T-u7a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="750.72463768115949" y="539.67391304347825"/>
+            <point key="canvasLocation" x="750.72463768115949" y="538.85869565217399"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="4ir-CP-KqG">
@@ -422,7 +426,63 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ne7-6S-WiW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1556.521739130435" y="538.85869565217399"/>
+            <point key="canvasLocation" x="1620" y="943"/>
+        </scene>
+        <!--Devices View Controller-->
+        <scene sceneID="Oc8-PM-DE2">
+            <objects>
+                <viewController id="IPF-Q2-pu6" customClass="DevicesViewController" customModule="SpotifySwift" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="V2c-hd-4Ie">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="II7-Wr-JAg">
+                                <rect key="frame" x="0.0" y="98" width="414" height="638"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="bS0-d2-vn2" customClass="DeviceTableViewCell" customModule="SpotifySwift" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bS0-d2-vn2" id="Wv7-Bw-nmZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UiM-F7-PJW">
+                                                    <rect key="frame" x="48" y="11" width="42" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p44-VH-Q1J">
+                                                    <rect key="frame" x="313" y="3" width="46" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <connections>
+                                                        <action selector="addDeviceBtn:" destination="bS0-d2-vn2" eventType="touchUpInside" id="4gx-md-rLs"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="addDeviceButton" destination="p44-VH-Q1J" id="r9i-jh-lzc"/>
+                                            <outlet property="deviceNameLabel" destination="UiM-F7-PJW" id="HND-rz-UyL"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="iNF-K5-ELN"/>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="II7-Wr-JAg" id="ZyH-Fo-XEU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DHd-xY-N4q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2275.36231884058" y="538.85869565217399"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ZRA-UT-qwE">
@@ -448,6 +508,7 @@
         <image name="LabelAndIcon" width="740" height="240"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="sVB-YR-ou0"/>
         <segue reference="kgC-L7-HUa"/>
         <segue reference="rr2-s3-ew7"/>
     </inferredMetricsTieBreakers>

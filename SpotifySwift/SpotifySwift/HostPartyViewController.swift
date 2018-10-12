@@ -9,11 +9,13 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+var userHash = ""
 
 class HostPartyViewController: UIViewController {
     var authCode: String = ""
     var hostName = ""
-    
+    var partyData:JSON = ""
+
     @IBOutlet weak var hostNameTextField: UITextField!
     
     
@@ -26,6 +28,8 @@ class HostPartyViewController: UIViewController {
         {
             let vc = segue.destination as? MainViewController
             vc?.hostName = self.hostName
+           // vc?.userHash = self.userHash
+
             
         }
     }
@@ -54,6 +58,8 @@ class HostPartyViewController: UIViewController {
                 //  Verification: If post request returns User Hash (Used to communicate with backend)
                 if (swiftyJsonVar["JUKE_MSG"].exists())
                 {
+                    self.partyData = swiftyJsonVar["JUKE_MSG"]
+                    userHash = swiftyJsonVar["JUKE_MSG"]["UserHash"].stringValue
                     self.performSegue(withIdentifier: "hostParty", sender:nil)
                     
                 }

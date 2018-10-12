@@ -25,7 +25,6 @@ class JoinPartyViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
 
         super.viewDidLoad()
-
         //Disable auto correct for input values
         n_nameTextField.autocorrectionType = .no
         r_codeTextField.autocorrectionType = .no

@@ -15,7 +15,6 @@ var songsJSON:[JSON] = []
 var currentlyPlayingJSON:[JSON] = []
 
 var searchResults:[JSON] = []
-var number = 0
 
 
 
@@ -122,13 +121,23 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     @IBOutlet weak var startPartyButton: UIButton!
     var isPlaying = false
     var roomCode:String = ""
+    var number = 0
 
-    
+//toDevices
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.destination is DevicesViewController
+        {
+            let vc = segue.destination as? DevicesViewController
+         //   vc?.userHash = self.userHash
+         
+        }
+    }
     var partyData:JSON = ""
     var timer:Timer? = nil
     
     // User Hash
-    var userHash:String = ""
+    //var userHash:String = ""
     // Function to show how many rows are displayed on the table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
@@ -181,18 +190,10 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     override func viewDidLoad() {
         if !partyData.isEmpty
         {
-            songsJSON = partyData["Songs"].array!
+            if(!(partyData["Songs"].stringValue == "NoSongsAdded")){
+                songsJSON = partyData["Songs"].array!
+            }
         }
-        update()
-        self.navigationItem.setHidesBackButton(true, animated:true);
-
-         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        let backItem = UIBarButtonItem()
-        backItem.title = "Back"
-        navBar.backBarButtonItem = backItem
-        //RetrieveImages()
-        super.viewDidLoad()
-        // Displays hosts party name
         if (hostName == "")
         {
             self.navBar.title = partyData["HostName"].stringValue + "'s Party"
@@ -201,6 +202,18 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         {
             self.navBar.title = hostName + "'s Party"
         }
+        update()
+        self.navigationItem.setHidesBackButton(true, animated:true);
+
+         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        let backItem = UIBarButtonItem()
+        backItem.title = "Back"
+        navBar.backBarButtonItem = backItem
+        // Displays hosts party name
+    
+        
+        super.viewDidLoad()
+     
         
        searchBar.delegate = self
         
@@ -270,7 +283,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         let HostparametersUpdate: Parameters = [
             "ImMobile": "ImMobile",
             "Operation": "UpdatePlaylist",
-            "JukeboxCookie": self.userHash,
+            "JukeboxCookie": userHash,
             ]
         
         // Post Request
@@ -285,28 +298,38 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                     DispatchQueue.main.async{
                         
                         if Thread.isMainThread{
-                            songsJSON = swiftyJsonVar["JUKE_MSG"].array!
-                            self.refreshUI()
+                            if (!(swiftyJsonVar["JUKE_MSG"].stringValue == "NoSongsAdded"))
+                            {
+                                songsJSON = swiftyJsonVar["JUKE_MSG"].array!
+                                self.refreshUI()
+                            }
                         }
                     }
                     
                 }
                 else{
                     // If server authentication fails
+                    print("fail 1 ")
                     print(swiftyJsonVar.error)
                 }
             }
             else
             {
                 // If Post requests responds with nil
-                print(responseData.error)
+                // DISBAND PARTY
+                self.createAlert(title: "Lost Connection to Jukebox ", message: "Your connection to the host has been lost, either the Jukebox party has been disbanded or you have internet connenctivity issues.")
+            
+              
+                
+                
+                
             }
         }
         
         let CurrentPlaybackparametersUpdate: Parameters = [
             "ImMobile": "ImMobile",
             "Operation": "CurrentlyPlaying",
-            "JukeboxCookie": self.userHash,
+            "JukeboxCookie": userHash,
             ]
         
         // Post Request
@@ -319,7 +342,6 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                    var jsonString = swiftyJsonVar["JUKE_MSG"].rawString()!
                     let responseJSON = jsonString.data(using: String.Encoding.utf8).flatMap({try? JSON(data: $0)}) ?? JSON(NSNull())
                     
-                    print(responseJSON)
                     self.playingSongName.text = responseJSON["item"]["name"].rawString()!
                     
                     self.playingSongArtist.text=responseJSON["item"]["artists"][0]["name"].rawString()!
@@ -337,7 +359,6 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 
                     }
                     
-                    print("Is song Playing?: ",self.isPlaying)
                     if (!self.isPlaying)
                     {
                         self.playingSongName.text = "Not Playing"
@@ -378,8 +399,19 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             tableView.reloadData()
         }
         
+    
+    }
+    
+    func createAlert(title:String, message:String)
+    {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+      
         
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
+            alert.dismiss(animated: true, completion: nil)
             
+        }))
+        self.present(alert,animated: true,completion: nil)
         
     }
 
@@ -409,21 +441,19 @@ extension MainViewController: PlaylistTableViewCellDelegate{
                         
                         if Thread.isMainThread{
                             //searchResults = swiftyJsonVar["tracks"]["items"].array!
-                            print(searchResults[0])
                             //self.refreshUI()
                         
                             
                             let HostparametersUpdate: Parameters = [
                                 "ImMobile": "ImMobile",
                                 "Operation": "UpdatePlaylist",
-                                "JukeboxCookie": self.userHash,
+                                "JukeboxCookie": userHash,
                                 ]
                             
                             // Post Request
                             Alamofire.request("https://spotify-jukebox.viljoen.industries/update.php",method:.post, parameters:HostparametersUpdate).responseJSON { (responseData) -> Void in
                                 if((responseData.result.value) != nil) {
                                     let swiftyJsonVar1 = JSON(responseData.result.value!)
-                                    print(swiftyJsonVar1)
                                     //  Verification: If post request returns User Hash (Used to communicate with backend)
                                     if (swiftyJsonVar1.exists())
                                     {
@@ -432,7 +462,6 @@ extension MainViewController: PlaylistTableViewCellDelegate{
                                         DispatchQueue.main.async{
                                             
                                             if Thread.isMainThread{
-                                                print (swiftyJsonVar1)
                                                 songsJSON = swiftyJsonVar1["JUKE_MSG"].array!
                                                 self.refreshUI()
                                                 
