@@ -142,12 +142,10 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         if SearchComplete == true{
-            number = searchResults.count
             return searchResults.count
         }
         else
         {
-        number = songsJSON.count
         return songsJSON.count
         }
     }
@@ -276,6 +274,43 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         }
         
     }
+    
+    
+    @IBAction func playBtn(_ sender: Any) {
+        
+        let getDevicesParameters: Parameters = [
+            "ImMobile": "ImMobile",
+            "JukeboxCookie": userHash,
+            ]
+        
+        
+        
+        // Post Request
+        Alamofire.request("https://spotify-jukebox.viljoen.industries/player.php",method:.post, parameters:getDevicesParameters).responseJSON { (responseData) -> Void in
+            
+            if((responseData.result.value) != nil) {
+                let swiftyJsonVar = JSON(responseData.result.value!)
+                //  Verification: If post request returns User Hash (Used to communicate with backend)
+                
+                if (swiftyJsonVar.exists())
+                {
+                    
+                    
+                }
+                else{
+                    // If server authentication fails
+                    print(swiftyJsonVar.error)
+                }
+            }
+            else
+            {
+                // If Post requests responds with nil
+                print(responseData.error)
+            }
+        }
+        
+    }
+    
     
 
     @objc func update(){

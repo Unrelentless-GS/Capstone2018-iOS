@@ -12,67 +12,113 @@ import SwiftyJSON
 //var userHash:String = ""
 var devicesJSON:[JSON] = []
 
-protocol DeviceTableViewCellDelegate {
-    func didTapDevice(title:String)
-}
+//protocol DeviceTableViewCellDelegate {
+//    func didTapDevice(title:String)
+//}
 
 class DeviceTableViewCell: UITableViewCell {
     
     @IBOutlet weak var deviceNameLabel: UILabel!
     
-    @IBOutlet weak var addDeviceButton: UIButton!
+    
     
     let deviceID = ""
     
-    var delegate: DeviceTableViewCellDelegate?
+   // var delegate: DeviceTableViewCellDelegate?
 
     
-    @IBAction func addDeviceBtn(_ sender: Any) {
-        delegate?.didTapDevice(title:"Buh")
-    }
+
     
     
     func setDevicesData(index:Int)
     {
-        print(devicesJSON[index]["name"].stringValue)
+        deviceNameLabel.text = devicesJSON[index]["name"].stringValue
+        
     }
 }
 
 class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
-    @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var tableView: UITableView!
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return devicesJSON.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DeviceTableViewCell
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "dCell", for: indexPath) as! DeviceTableViewCell
         
         
         cell.setDevicesData(index: indexPath.row)
         
+        
+     //   cell.delegate = self as? DeviceTableViewCellDelegate
+
+        
         return cell
     }
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+       
+        let getDevicesParameters: Parameters = [
+            "ImMobile": "ImMobile",
+            "Action": "PlayOnDevice",
+            "DeviceID": devicesJSON[indexPath.row]["id"].stringValue,
+            "JukeboxCookie": userHash,
+            ]
+        
+        
+        print(devicesJSON[indexPath.row]["name"])
+        
+        // Post Request
+        Alamofire.request("https://spotify-jukebox.viljoen.industries/device.php",method:.post, parameters:getDevicesParameters).responseJSON { (responseData) -> Void in
+            self.navigationController?.popViewController(animated: true)
+
+            if((responseData.result.value) != nil) {
+                let swiftyJsonVar = JSON(responseData.result.value!)
+                //  Verification: If post request returns User Hash (Used to communicate with backend)
+                
+                if (swiftyJsonVar.exists())
+                {
+                    print(devicesJSON)
+
+                    
+                }
+                else{
+                    // If server authentication fails
+                    print(swiftyJsonVar.error)
+                }
+            }
+            else
+            {
+                // If Post requests responds with nil
+                print(responseData.error)
+            }
+        }
+        
+        
+        
+    }
     
     override func viewDidLoad() {
         update()
         super.viewDidLoad()
-        print("USER HASH", userHash)
+        tableView.dataSource = self
+        
         tableView.delegate = self
-
         // Do any additional setup after loading the view.
     }
     
+    
+    override func viewDidAppear(_ animated: Bool) {
+        update()
+    }
     
    
 
 
   
     func update(){
-        print(userHash)
         let getDevicesParameters: Parameters = [
             "ImMobile": "ImMobile",
             "Action": "GetDevices",
@@ -81,21 +127,21 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
         
         
         // Post Request
-        Alamofire.request("https://spotify-jukebox.viljoen.industries/player.php",method:.post, parameters:getDevicesParameters).responseJSON { (responseData) -> Void in
-            print("BUH",responseData.result.value)
-            print(responseData)
+        Alamofire.request("https://spotify-jukebox.viljoen.industries/device.php",method:.post, parameters:getDevicesParameters).responseJSON { (responseData) -> Void in
+          
             if((responseData.result.value) != nil) {
                 let swiftyJsonVar = JSON(responseData.result.value!)
                 //  Verification: If post request returns User Hash (Used to communicate with backend)
-                print(swiftyJsonVar)
-                print(responseData.result.value!)
-                print(userHash)
+               
                 if (swiftyJsonVar.exists())
                 {
                     
-                    print(swiftyJsonVar)
-                    var jsonString = swiftyJsonVar["JUKE_MSG"].rawString()!
+                    devicesJSON = swiftyJsonVar["devices"].array!
                     
+                    
+                    print(devicesJSON)
+                    self.tableView.reloadData()
+
                   
                 }
                 else{
@@ -118,12 +164,12 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
 
 }
 
-extension DevicesViewController: DeviceTableViewCellDelegate{
-    func didTapDevice(title: String) {
-        print(title)
-    }
-    
-    
-}
+//extension DevicesViewController: DeviceTableViewCellDelegate{
+//    func didTapDevice(title: String) {
+//        print(title)
+//    }
+//
+//
+//}
 
 
