@@ -9,6 +9,8 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+var roomCode:String = ""
+
 
 class JoinPartyViewController: UIViewController {
 
@@ -19,7 +21,6 @@ class JoinPartyViewController: UIViewController {
     @IBOutlet weak var r_codeTextField: UITextField!
     
     var partyData:JSON = ""
-    var roomCode:String = ""
 
     override func viewDidLoad() {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -39,10 +40,20 @@ class JoinPartyViewController: UIViewController {
         {
             let vc = segue.destination as? MainViewController
             vc?.partyData = self.partyData
-            vc?.roomCode = self.roomCode
         }
     }
-    
+    func createAlert(title:String, message:String)
+    {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        
+        
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
+            alert.dismiss(animated: true, completion: nil)
+            
+        }))
+        self.present(alert,animated: true,completion: nil)
+        
+    }
     
 
     override func didReceiveMemoryWarning() {
@@ -52,6 +63,9 @@ class JoinPartyViewController: UIViewController {
     
 
     @IBAction func joinPartyButton(_ sender: UIButton) {
+        
+        
+        
         
         if(n_nameTextField.hasText && r_codeTextField.hasText)
         {
@@ -69,12 +83,13 @@ class JoinPartyViewController: UIViewController {
                     
                     if(swiftyJsonVar["JUKE_MSG"]["JukeboxFault"].exists())
                     {
-                        print("Party does not exist")
+                        self.createAlert(title: "Party Does Not Exist", message: "The room code you have entered is invalid.")
+                        
                     }
                     
                     if(swiftyJsonVar["JUKE_MSG"]["UserHash"].exists())
                     {
-                        self.roomCode = self.r_codeTextField.text!
+                        roomCode = self.r_codeTextField.text!
                         self.partyData = swiftyJsonVar["JUKE_MSG"]
                         self.performSegue(withIdentifier: "joinPartySegue", sender:nil)
                         print(swiftyJsonVar,"USER HASH!@#$")
@@ -89,7 +104,8 @@ class JoinPartyViewController: UIViewController {
         }
         else
         {
-            print("Please enter Roomcode and Nick Name")
+              self.createAlert(title: "Cannot Join Party", message: "Please enter both room code and nickname.")
+            
         }
         
         

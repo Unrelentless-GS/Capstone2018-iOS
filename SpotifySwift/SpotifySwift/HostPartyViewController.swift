@@ -60,6 +60,8 @@ class HostPartyViewController: UIViewController {
                 {
                     self.partyData = swiftyJsonVar["JUKE_MSG"]
                     userHash = swiftyJsonVar["JUKE_MSG"]["UserHash"].stringValue
+                    print(self.partyData)
+                    
                     self.performSegue(withIdentifier: "hostParty", sender:nil)
                     
                 }
@@ -75,6 +77,17 @@ class HostPartyViewController: UIViewController {
             }
         }
         
+        }
+        else
+        {
+            let alert = UIAlertController(title: "Cannot Host Party", message: "Please enter a party name.", preferredStyle: UIAlertControllerStyle.alert)
+            
+            
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
+                alert.dismiss(animated: true, completion: nil)
+                
+            }))
+            self.present(alert,animated: true,completion: nil)
         }
     
     }

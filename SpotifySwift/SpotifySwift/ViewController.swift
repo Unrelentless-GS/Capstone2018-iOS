@@ -66,7 +66,12 @@ class ViewController: UIViewController {
     @objc func receievedUrlFromSpotify(_ notification: Notification) {
         guard let url = notification.object as? URL else { return }
         
+        print(url)
         
+        if (!(url.absoluteString == "jukebox://?error=access_denied"))
+        {
+
+            
         
         //Get the Auth code from URL
         //jukebox://?code=AQD6Zz5gaKeTKMYyMS...
@@ -83,7 +88,7 @@ class ViewController: UIViewController {
         
         // POST REQUEST TO SEND AUTH CODE TO CREATE PARTY
        
-        
+        }
        
     
     }

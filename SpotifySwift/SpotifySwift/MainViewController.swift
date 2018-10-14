@@ -15,7 +15,7 @@ var songsJSON:[JSON] = []
 var currentlyPlayingJSON:[JSON] = []
 
 var searchResults:[JSON] = []
-
+var pressPlay:Bool = false
 
 
 protocol PlaylistTableViewCellDelegate {
@@ -278,43 +278,19 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     @IBAction func playBtn(_ sender: Any) {
         
-        let getDevicesParameters: Parameters = [
-            "ImMobile": "ImMobile",
-            "JukeboxCookie": userHash,
-            ]
-        
-        
-        
-        // Post Request
-        Alamofire.request("https://spotify-jukebox.viljoen.industries/player.php",method:.post, parameters:getDevicesParameters).responseJSON { (responseData) -> Void in
-            
-            if((responseData.result.value) != nil) {
-                let swiftyJsonVar = JSON(responseData.result.value!)
-                //  Verification: If post request returns User Hash (Used to communicate with backend)
-                
-                if (swiftyJsonVar.exists())
-                {
-                    
-                    
-                }
-                else{
-                    // If server authentication fails
-                    print(swiftyJsonVar.error)
-                }
-            }
-            else
-            {
-                // If Post requests responds with nil
-                print(responseData.error)
-            }
-        }
-        
+       startParty()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        if(pressPlay)
+        {
+            startParty()
+            pressPlay = false
+        }
+    }
+
     
-
     @objc func update(){
-
         let HostparametersUpdate: Parameters = [
             "ImMobile": "ImMobile",
             "Operation": "UpdatePlaylist",
@@ -331,12 +307,18 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                     
 
                     DispatchQueue.main.async{
-                        
+                        print(swiftyJsonVar)
                         if Thread.isMainThread{
                             if (!(swiftyJsonVar["JUKE_MSG"].stringValue == "NoSongsAdded"))
                             {
                                 songsJSON = swiftyJsonVar["JUKE_MSG"].array!
                                 self.refreshUI()
+                            }
+                            else
+                            {
+                                songsJSON = []
+                                self.refreshUI()
+
                             }
                         }
                     }
@@ -350,10 +332,20 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             }
             else
             {
-                // If Post requests responds with nil
-                // DISBAND PARTY
-                self.createAlert(title: "Lost Connection to Jukebox ", message: "Your connection to the host has been lost, either the Jukebox party has been disbanded or you have internet connenctivity issues.")
-            
+             
+
+                
+                
+                DispatchQueue.main.async{
+                    print("WAHHWEJWOWEOWEJOWEOKEWFOEWMOWMFOWEMFOMOWMOEMWFOMFOWE")
+                    self.performSegue(withIdentifier: "disband", sender:nil)
+
+                    self.createAlert(title: "Lost Connection to Jukebox ", message: "Your connection to the host has been lost, either the Jukebox party has been disbanded or you have internet connenctivity issues.")
+                    self.timer!.invalidate()
+
+                    
+                }
+
               
                 
                 
@@ -422,6 +414,51 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         self.tableView.reloadData()
         
     } }
+    
+    func startParty(){
+        let getDevicesParameters: Parameters = [
+            "ImMobile": "ImMobile",
+            "JukeboxCookie": userHash,
+            ]
+        
+        
+        
+        // Post Request
+        Alamofire.request("https://spotify-jukebox.viljoen.industries/player.php",method:.post, parameters:getDevicesParameters).responseString { (responseData) -> Void in
+            
+            if((responseData.result.value) != nil) {
+                let swiftyJsonVar = JSON(responseData.result.value!)
+                //  Verification: If post request returns User Hash (Used to communicate with backend)
+                self.update()
+                
+                
+                if (swiftyJsonVar.exists())
+                {
+                    if (swiftyJsonVar == "NoDeviceSelected")
+                    {
+                        
+                        pressPlay = true
+                        self.performSegue(withIdentifier: "toDevices", sender:nil)
+                        
+                        
+                    }
+                    
+                }
+                else{
+                    // If server authentication fails
+                    print(swiftyJsonVar.error)
+                }
+            }
+            else
+            {
+                // If Post requests responds with nil
+                print(responseData.error)
+            }
+        }
+        
+        
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
