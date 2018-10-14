@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IFm-zI-gsF">
-                                <rect key="frame" x="40" y="370" width="334" height="39"/>
+                                <rect key="frame" x="40" y="414" width="334" height="39"/>
                                 <color key="backgroundColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Host">
@@ -33,13 +33,13 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LabelAndIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Him-B0-a8d">
-                                <rect key="frame" x="40" y="220" width="334" height="100"/>
+                                <rect key="frame" x="40" y="264" width="334" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="7KK-rz-v7Q"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vuc-hZ-C39">
-                                <rect key="frame" x="40" y="429" width="334" height="39"/>
+                                <rect key="frame" x="40" y="473" width="334" height="39"/>
                                 <color key="backgroundColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Join">
@@ -143,7 +143,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VtU-K1-ovm">
-                                <rect key="frame" x="0.0" y="220" width="414" height="40"/>
+                                <rect key="frame" x="0.0" y="264" width="414" height="40"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Room Code" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="apH-uh-2yI">
                                         <rect key="frame" x="40" y="0.0" width="334" height="40"/>
@@ -171,7 +171,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSo-Jd-HVW">
-                                <rect key="frame" x="0.0" y="300" width="414" height="40"/>
+                                <rect key="frame" x="0.0" y="344" width="414" height="40"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Nickname" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xLO-vX-D0P">
                                         <rect key="frame" x="40" y="0.0" width="334" height="40"/>
@@ -512,7 +512,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iT7-VA-vUB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1093" y="585"/>
+            <point key="canvasLocation" x="-1341" y="185"/>
         </scene>
     </scenes>
     <resources>
@@ -522,6 +522,6 @@
         <segue reference="6xs-jX-klf"/>
         <segue reference="kgC-L7-HUa"/>
         <segue reference="rr2-s3-ew7"/>
-        <segue reference="ihX-ss-IFJ"/>
+        <segue reference="hBA-LU-UAd"/>
     </inferredMetricsTieBreakers>
 </document>

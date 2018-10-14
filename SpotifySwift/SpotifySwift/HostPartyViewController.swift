@@ -10,7 +10,6 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 var userHash = ""
-
 class HostPartyViewController: UIViewController {
     var authCode: String = ""
     var hostName = ""
@@ -92,6 +91,11 @@ class HostPartyViewController: UIViewController {
     
     }
     override func viewDidLoad() {
+        self.navigationController?.isNavigationBarHidden = false
+        print("HOST VIEW")
+        
+       
+        
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.

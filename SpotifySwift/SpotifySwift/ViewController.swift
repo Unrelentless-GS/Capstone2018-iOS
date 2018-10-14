@@ -9,8 +9,10 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import SafariServices
 
-class ViewController: UIViewController {
+
+class ViewController: UIViewController,SFSafariViewControllerDelegate {
     var authCode = ""
 
     var partyData:String = ""
@@ -26,14 +28,15 @@ class ViewController: UIViewController {
         }
     }
     override func viewDidLoad() {
-        
+        print("MAIN VIEW")
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        self.dismiss(animated: true, completion: nil)
+
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
@@ -53,8 +56,15 @@ class ViewController: UIViewController {
         // Convert into URL
         if let authURL = URL(string: authPath){
             
-            // Open Safari with link
-            UIApplication.shared.open(authURL, options: [:], completionHandler:nil)
+            
+            if let url = URL(string: authURL.absoluteString) {
+                let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+                vc.delegate = self
+                
+                present(vc, animated: true)
+            }
+            
+        
                 
             
         }
@@ -62,16 +72,19 @@ class ViewController: UIViewController {
         
         
     }
+//    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+//        dismiss(animated: true)
+//    }
     
     @objc func receievedUrlFromSpotify(_ notification: Notification) {
         guard let url = notification.object as? URL else { return }
         
-        print(url)
+      //  print(url)
         
         if (!(url.absoluteString == "jukebox://?error=access_denied"))
         {
 
-            
+
         
         //Get the Auth code from URL
         //jukebox://?code=AQD6Zz5gaKeTKMYyMS...
@@ -82,11 +95,11 @@ class ViewController: UIViewController {
         if let range = components?.query?.range(of: "code=") {
             authCode = String((components?.query![range.upperBound...])!)
         }
-       
-        self.performSegue(withIdentifier: "hostToJuke", sender:nil)
 
-        
-        // POST REQUEST TO SEND AUTH CODE TO CREATE PARTY
+        self.performSegue(withIdentifier: "hostToJuke", sender:nil)
+            dismiss(animated:true)
+
+
        
         }
        
