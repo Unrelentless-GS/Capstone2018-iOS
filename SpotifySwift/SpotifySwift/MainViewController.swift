@@ -343,11 +343,11 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                 //  Verification: If post request returns User Hash (Used to communicate with backend)
                 if (updateJSON.exists())
                 {
-                        print(updateJSON)
                         if Thread.isMainThread{
                             if (!(updateJSON["JUKE_MSG"].stringValue == "NoSongsAdded"))
                             {
                                 songsJSON = updateJSON["JUKE_MSG"].array!
+                               // userHash = updateJSON["JUKE_MSG"]["UserHash"].stringValue
                                 self.refreshUI()
                             }
                             else
@@ -605,7 +605,6 @@ extension MainViewController: PlaylistTableViewCellDelegate{
         
         
     
-        print(title["SongSpotifyID"].stringValue)
         
         let Hostparameters: Parameters = [
             "ImMobile": "ImMobile",
@@ -619,7 +618,6 @@ extension MainViewController: PlaylistTableViewCellDelegate{
         Alamofire.request("https://spotify-jukebox.viljoen.industries/vote.php",method:.post, parameters:Hostparameters).responseJSON { (responseData) -> Void in
             if((responseData.result.value) != nil) {
                 let swiftyJsonVar1 = JSON(responseData.result.value!)
-                print(swiftyJsonVar1)
                 //  Verification: If post request returns User Hash (Used to communicate with backend)
                 if (swiftyJsonVar1.exists())
                 {

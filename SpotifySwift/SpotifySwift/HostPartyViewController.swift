@@ -63,6 +63,7 @@ class HostPartyViewController: UIViewController {
                     self.partyData = swiftyJsonVar["JUKE_MSG"]
                     userHash = swiftyJsonVar["JUKE_MSG"]["UserHash"].stringValue
                     print(self.partyData)
+                    print(userHash)
                     Host = true
                     self.performSegue(withIdentifier: "hostParty", sender:nil)
                     activityIndicator.stopAnimating()

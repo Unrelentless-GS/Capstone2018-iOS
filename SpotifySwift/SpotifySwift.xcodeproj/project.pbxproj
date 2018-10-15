@@ -19,7 +19,6 @@
 		6E5998E52170C90700771535 /* DevicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5998E42170C90700771535 /* DevicesViewController.swift */; };
 		6E5998FC2172E11A00771535 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5998FB2172E11A00771535 /* SettingsViewController.swift */; };
 		6E8F515A216DC46C0068DEF2 /* HostPartyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8F5159216DC46C0068DEF2 /* HostPartyViewController.swift */; };
-		6E95BD1E21463852008AB7DB /* SpotifyAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E95BD1D21463852008AB7DB /* SpotifyAPIManager.swift */; };
 		6E95BDEA2146421E008AB7DB /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E95BDD9214641F8008AB7DB /* Alamofire.framework */; };
 		6E95BDEB2146421E008AB7DB /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E95BDD9214641F8008AB7DB /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E95BDEF2146AF87008AB7DB /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E95BDEE2146AF87008AB7DB /* MainViewController.swift */; };
@@ -207,7 +206,6 @@
 		6E5998E42170C90700771535 /* DevicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesViewController.swift; sourceTree = "<group>"; };
 		6E5998FB2172E11A00771535 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		6E8F5159216DC46C0068DEF2 /* HostPartyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostPartyViewController.swift; sourceTree = "<group>"; };
-		6E95BD1D21463852008AB7DB /* SpotifyAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIManager.swift; sourceTree = "<group>"; };
 		6E95BDCA21463ECE008AB7DB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E95BDCD214641F8008AB7DB /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		6E95BDEE2146AF87008AB7DB /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -258,7 +256,6 @@
 			children = (
 				6E47195C214403E80046C5DE /* Frameworks */,
 				6E47194A214403620046C5DE /* AppDelegate.swift */,
-				6E95BD1C21463836008AB7DB /* Helpers */,
 				6E47194C214403620046C5DE /* ViewController.swift */,
 				6E8F5159216DC46C0068DEF2 /* HostPartyViewController.swift */,
 				6E95BDEE2146AF87008AB7DB /* MainViewController.swift */,
@@ -282,14 +279,6 @@
 				6E56B09C21678B4D00B375CA /* SpotifyAuthentication.framework */,
 			);
 			path = Frameworks;
-			sourceTree = "<group>";
-		};
-		6E95BD1C21463836008AB7DB /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				6E95BD1D21463852008AB7DB /* SpotifyAPIManager.swift */,
-			);
-			path = Helpers;
 			sourceTree = "<group>";
 		};
 		6E95BDCE214641F8008AB7DB /* Products */ = {
@@ -573,7 +562,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E47194D214403620046C5DE /* ViewController.swift in Sources */,
-				6E95BD1E21463852008AB7DB /* SpotifyAPIManager.swift in Sources */,
 				6E47194B214403620046C5DE /* AppDelegate.swift in Sources */,
 				6E5998FC2172E11A00771535 /* SettingsViewController.swift in Sources */,
 				6E471966214405FB0046C5DE /* Constants.swift in Sources */,

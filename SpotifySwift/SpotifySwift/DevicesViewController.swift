@@ -9,7 +9,6 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-//var userHash:String = ""
 var devicesJSON:[JSON] = []
 
 //protocol DeviceTableViewCellDelegate {
@@ -26,10 +25,6 @@ class DeviceTableViewCell: UITableViewCell {
     
    // var delegate: DeviceTableViewCellDelegate?
 
-    
-
-    
-    
     func setDevicesData(index:Int)
     {
         deviceNameLabel.text = devicesJSON[index]["name"].stringValue
@@ -101,7 +96,7 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     override func viewDidLoad() {
-        update()
+       update()
         print(userHash)
         super.viewDidLoad()
         tableView.dataSource = self
@@ -112,6 +107,8 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
     
     
     override func viewDidAppear(_ animated: Bool) {
+        print(userHash)
+
         update()
     }
     
@@ -129,33 +126,21 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
         
         // Post Request
         Alamofire.request("https://spotify-jukebox.viljoen.industries/device.php",method:.post, parameters:getDevicesParameters).responseJSON { (responseData) -> Void in
-          
+            
             if((responseData.result.value) != nil) {
                 let swiftyJsonVar = JSON(responseData.result.value!)
                 //  Verification: If post request returns User Hash (Used to communicate with backend)
-               
+                
                 if (swiftyJsonVar.exists())
                 {
-                    
-                    if (!(swiftyJsonVar["error"]["status"] == 401))
-                    {
-                    print(swiftyJsonVar)
-                    
-                    print(userHash)
                     
                     devicesJSON = swiftyJsonVar["devices"].array!
                     
                     
                     print(devicesJSON)
                     self.tableView.reloadData()
-                    }
-                    else
-                    {
-                        print("ERROR 404")
-                        print(swiftyJsonVar)
-
-                    }
-                  
+                    
+                    
                 }
                 else{
                     // If server authentication fails
@@ -172,17 +157,15 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
         
     }
     
+    
+    
+
+    
 
   
 
 }
 
-//extension DevicesViewController: DeviceTableViewCellDelegate{
-//    func didTapDevice(title: String) {
-//        print(title)
-//    }
-//
-//
-//}
+
 
 

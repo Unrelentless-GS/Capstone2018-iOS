@@ -23,7 +23,7 @@ class SettingsViewController: UIViewController {
              self.chooseDeviceButton.isHidden = false
             self.settingsLabel.isHidden = false
             
-            
+            print(userHash)
         }
         else
         {

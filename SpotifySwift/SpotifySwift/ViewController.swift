@@ -36,10 +36,6 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        print("MAIN VIEW 1")
-
-        
-      //  self.dismiss(animated: true, completion: nil)
 
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
@@ -99,8 +95,8 @@ class ViewController: UIViewController {
         if let range = components?.query?.range(of: "code=") {
             authCode = String((components?.query![range.upperBound...])!)
         }
-        dismiss(animated:true)
         self.performSegue(withIdentifier: "hostToJuke", sender:nil)
+            dismiss(animated:true)
 
 
        
