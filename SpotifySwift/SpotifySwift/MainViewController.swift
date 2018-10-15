@@ -409,12 +409,13 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                     self.isPlaying = responseJSON["is_playing"].boolValue
                     if(self.isPlaying)
                     {
-                        self.startPartyButton.setTitle("Pause", for: .normal)
+                        //self.startPartyButton.setTitle("Pause", for: .normal)
+                        self.startPartyButton.setImage(UIImage(named: "pause"), for: .normal)
                     }
                     else
                     {
-                        self.startPartyButton.setTitle("Play", for: .normal)
-
+                        //self.startPartyButton.setTitle("Play", for: .normal)
+                        self.startPartyButton.setImage(UIImage(named: "play"), for: .normal)
                     }
                     
                     if (!self.isPlaying)
