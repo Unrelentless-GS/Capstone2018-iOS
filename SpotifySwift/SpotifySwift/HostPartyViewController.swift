@@ -62,6 +62,7 @@ class HostPartyViewController: UIViewController {
                 {
                     self.partyData = swiftyJsonVar["JUKE_MSG"]
                     userHash = swiftyJsonVar["JUKE_MSG"]["UserHash"].stringValue
+                    roomCode = swiftyJsonVar["JUKE_MSG"]["JoinCode"].stringValue
                     print(self.partyData)
                     print(userHash)
                     Host = true

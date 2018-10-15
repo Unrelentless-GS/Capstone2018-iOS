@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VWs-6Q-7Km">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VWs-6Q-7Km">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -388,7 +390,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iU4-2R-DKT">
-                                <rect key="frame" x="357" y="687" width="37" height="37"/>
+                                <rect key="frame" x="369" y="699" width="25" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="iU4-2R-DKT" secondAttribute="height" multiplier="1:1" id="ZQN-fp-XTf"/>
                                 </constraints>
@@ -600,17 +602,17 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LabelAndIcon" width="1480" height="480"/>
-        <image name="add" width="37.5" height="37.5"/>
-        <image name="downvote" width="37.5" height="37.5"/>
-        <image name="play" width="37.5" height="37.5"/>
-        <image name="settings" width="37.5" height="37.5"/>
-        <image name="upvote" width="37.5" height="37.5"/>
+        <image name="LabelAndIcon" width="740" height="240"/>
+        <image name="add" width="25" height="25"/>
+        <image name="downvote" width="50" height="50"/>
+        <image name="play" width="25" height="25"/>
+        <image name="settings" width="25" height="25"/>
+        <image name="upvote" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="6xs-jX-klf"/>
+        <segue reference="ALo-cK-w4w"/>
         <segue reference="kgC-L7-HUa"/>
         <segue reference="5ak-og-LhE"/>
-        <segue reference="ihX-ss-IFJ"/>
+        <segue reference="zx4-7N-Z8F"/>
     </inferredMetricsTieBreakers>
 </document>

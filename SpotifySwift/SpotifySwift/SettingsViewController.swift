@@ -12,7 +12,6 @@ import SwiftyJSON
 class SettingsViewController: UIViewController {
 
     @IBOutlet weak var chooseDeviceButton: UIButton!
-    @IBOutlet weak var settingsLabel: UILabel!
     @IBOutlet weak var leavePartyButton: UIButton!
     @IBOutlet weak var roomCodeLabel: UILabel!
     override func viewDidLoad() {
@@ -21,14 +20,12 @@ class SettingsViewController: UIViewController {
             self.leavePartyButton.setTitle("End Party", for: .normal)
             
              self.chooseDeviceButton.isHidden = false
-            self.settingsLabel.isHidden = false
             
             print(userHash)
         }
         else
         {
             self.chooseDeviceButton.isHidden = true
-            self.settingsLabel.isHidden = true
 
             self.leavePartyButton.setTitle("Leave Party", for: .normal)
         }
