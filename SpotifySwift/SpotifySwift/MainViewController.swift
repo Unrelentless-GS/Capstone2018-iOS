@@ -442,8 +442,13 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
    func refreshUI() {
     DispatchQueue.main.async {
+      //  var indexPaths = self.tableView.indexPathsForVisibleRows
+
+        let sectionIndex = IndexSet(integer: 0)
+        self.tableView.reloadSections(sectionIndex, with: .automatic)
         self.tableView.reloadData()
-        
+
+        //self.tableView.reloadRows(at: IndexSet, with: <#T##UITableViewRowAnimation#>)
     } }
     
     
