@@ -32,16 +32,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             //Send out a notification which we can listen for in our sign in view controller
             NotificationCenter.default.post(name: NSNotification.Name.Spotify.authURLOpened, object: url)
-            print("Yes")
             return true
         }
-        print("NO")
+        print("Auth Failed")
         return false
     }
     
     
     func setupSpotify() {
-        print("rfe")
         SPTAuth.defaultInstance().clientID = Constants.clientID
         SPTAuth.defaultInstance().redirectURL = URL(string:Constants.redirectURI)!
         SPTAuth.defaultInstance().sessionUserDefaultsKey = Constants.sessionKey
