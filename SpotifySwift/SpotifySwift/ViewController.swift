@@ -11,8 +11,8 @@ import Alamofire
 import SwiftyJSON
 import SafariServices
 
-
-class ViewController: UIViewController,SFSafariViewControllerDelegate {
+var Host:Bool = false
+class ViewController: UIViewController {
     var authCode = ""
 
     var partyData:String = ""
@@ -35,7 +35,11 @@ class ViewController: UIViewController,SFSafariViewControllerDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.dismiss(animated: true, completion: nil)
+        
+        print("MAIN VIEW 1")
+
+        
+      //  self.dismiss(animated: true, completion: nil)
 
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
@@ -59,7 +63,7 @@ class ViewController: UIViewController,SFSafariViewControllerDelegate {
             
             if let url = URL(string: authURL.absoluteString) {
                 let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
-                vc.delegate = self
+              //  vc.delegate = self
                 
                 present(vc, animated: true)
             }
@@ -72,9 +76,9 @@ class ViewController: UIViewController,SFSafariViewControllerDelegate {
         
         
     }
-//    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-//        dismiss(animated: true)
-//    }
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        dismiss(animated: true)
+    }
     
     @objc func receievedUrlFromSpotify(_ notification: Notification) {
         guard let url = notification.object as? URL else { return }
@@ -95,9 +99,8 @@ class ViewController: UIViewController,SFSafariViewControllerDelegate {
         if let range = components?.query?.range(of: "code=") {
             authCode = String((components?.query![range.upperBound...])!)
         }
-
+        dismiss(animated:true)
         self.performSegue(withIdentifier: "hostToJuke", sender:nil)
-            dismiss(animated:true)
 
 
        

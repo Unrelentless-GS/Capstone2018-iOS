@@ -102,6 +102,7 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
     
     override func viewDidLoad() {
         update()
+        print(userHash)
         super.viewDidLoad()
         tableView.dataSource = self
         
@@ -136,12 +137,24 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
                 if (swiftyJsonVar.exists())
                 {
                     
+                    if (!(swiftyJsonVar["error"]["status"] == 401))
+                    {
+                    print(swiftyJsonVar)
+                    
+                    print(userHash)
+                    
                     devicesJSON = swiftyJsonVar["devices"].array!
                     
                     
                     print(devicesJSON)
                     self.tableView.reloadData()
+                    }
+                    else
+                    {
+                        print("ERROR 404")
+                        print(swiftyJsonVar)
 
+                    }
                   
                 }
                 else{

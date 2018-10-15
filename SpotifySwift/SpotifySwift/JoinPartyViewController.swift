@@ -89,6 +89,7 @@ class JoinPartyViewController: UIViewController {
                     
                     if(swiftyJsonVar["JUKE_MSG"]["UserHash"].exists())
                     {
+                        Host = false
                         roomCode = self.r_codeTextField.text!
                         self.partyData = swiftyJsonVar["JUKE_MSG"]
                         self.performSegue(withIdentifier: "joinPartySegue", sender:nil)

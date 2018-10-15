@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IFm-zI-gsF">
-                                <rect key="frame" x="40" y="414" width="334" height="39"/>
+                                <rect key="frame" x="40" y="370" width="334" height="39"/>
                                 <color key="backgroundColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Host">
@@ -33,13 +33,13 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LabelAndIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Him-B0-a8d">
-                                <rect key="frame" x="40" y="264" width="334" height="100"/>
+                                <rect key="frame" x="40" y="220" width="334" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="7KK-rz-v7Q"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vuc-hZ-C39">
-                                <rect key="frame" x="40" y="473" width="334" height="39"/>
+                                <rect key="frame" x="40" y="429" width="334" height="39"/>
                                 <color key="backgroundColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Join">
@@ -111,7 +111,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.11764705882352941" green="0.11764705882352941" blue="0.11764705882352941" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="iOA-hu-15H"/>
                     </view>
                     <connections>
@@ -143,7 +143,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VtU-K1-ovm">
-                                <rect key="frame" x="0.0" y="264" width="414" height="40"/>
+                                <rect key="frame" x="0.0" y="220" width="414" height="40"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Room Code" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="apH-uh-2yI">
                                         <rect key="frame" x="40" y="0.0" width="334" height="40"/>
@@ -171,7 +171,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSo-Jd-HVW">
-                                <rect key="frame" x="0.0" y="344" width="414" height="40"/>
+                                <rect key="frame" x="0.0" y="300" width="414" height="40"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Nickname" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xLO-vX-D0P">
                                         <rect key="frame" x="40" y="0.0" width="334" height="40"/>
@@ -298,8 +298,8 @@
                                                         <action selector="downVoteBtn:" destination="SZD-Rj-Afo" eventType="touchUpInside" id="gFm-gb-vUR"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1yq-uS-XHE">
-                                                    <rect key="frame" x="268" y="18" width="30" height="30"/>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1yq-uS-XHE">
+                                                    <rect key="frame" x="268" y="16" width="30" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Up"/>
                                                     <connections>
@@ -435,13 +435,25 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r3M-nD-kqz">
+                                <rect key="frame" x="54" y="269" width="160" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="leavePartyBtn:" destination="1vv-94-K5x" eventType="touchUpInside" id="ezp-Rh-sHt"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="i9M-wz-ke4"/>
                     </view>
                     <connections>
+                        <outlet property="chooseDeviceButton" destination="Hpl-bT-Y6N" id="T0q-7E-2YE"/>
+                        <outlet property="leavePartyButton" destination="r3M-nD-kqz" id="DwE-j3-KXh"/>
                         <outlet property="roomCodeLabel" destination="vQ7-d7-sbs" id="IAV-qq-B3C"/>
+                        <outlet property="settingsLabel" destination="sPi-Gs-Dk2" id="Wuh-T8-XYC"/>
                         <segue destination="IPF-Q2-pu6" kind="show" id="35o-3g-avb"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="disbandParty" id="zx4-7N-Z8F"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ne7-6S-WiW" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -522,6 +534,6 @@
         <segue reference="6xs-jX-klf"/>
         <segue reference="kgC-L7-HUa"/>
         <segue reference="rr2-s3-ew7"/>
-        <segue reference="hBA-LU-UAd"/>
+        <segue reference="ihX-ss-IFJ"/>
     </inferredMetricsTieBreakers>
 </document>
