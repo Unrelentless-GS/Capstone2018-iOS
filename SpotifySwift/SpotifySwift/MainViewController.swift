@@ -346,14 +346,21 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                         if Thread.isMainThread{
                             if (!(updateJSON["JUKE_MSG"].stringValue == "NoSongsAdded"))
                             {
+                                var compare = songsJSON
                                 songsJSON = updateJSON["JUKE_MSG"].array!
-                               // userHash = updateJSON["JUKE_MSG"]["UserHash"].stringValue
+                               
+                                
+                                
+                                if (!(compare == songsJSON))
+                                {
+                                    print("DIFFERENT")
                                 self.refreshUI()
+                                }
                             }
                             else
                             {
                                 songsJSON = []
-                                self.refreshUI()
+                               // self.refreshUI()
 
                             }
                         }
@@ -425,7 +432,6 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                     }
                     
                     
-                    self.refreshUI()
                 }
                 else{
                     // If server authentication fails
@@ -442,13 +448,9 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
    func refreshUI() {
     DispatchQueue.main.async {
-      //  var indexPaths = self.tableView.indexPathsForVisibleRows
-
         let sectionIndex = IndexSet(integer: 0)
-        self.tableView.reloadSections(sectionIndex, with: .automatic)
-        self.tableView.reloadData()
+        self.tableView.reloadSections(sectionIndex, with: .fade)
 
-        //self.tableView.reloadRows(at: IndexSet, with: <#T##UITableViewRowAnimation#>)
     } }
     
     
