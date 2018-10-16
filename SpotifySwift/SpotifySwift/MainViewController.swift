@@ -18,7 +18,7 @@ var searchResults:[JSON] = []
 var pressPlay:Bool = false
 
 var timer:Timer? = nil
-
+var notPlayingValidation = false
 protocol PlaylistTableViewCellDelegate {
     func didTapAddSong(title:String)
     func didTapVote(title:JSON, voted:String, direction: String)
@@ -339,6 +339,8 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         
         Alamofire.request("https://spotify-jukebox.viljoen.industries/update.php",method:.post, parameters:updateParameters).responseJSON { (responseData) -> Void in
             if((responseData.result.value) != nil) {
+               // print(responseData.request?.allHTTPHeaderFields)
+
                 let updateJSON = JSON(responseData.result.value!)
                 //  Verification: If post request returns User Hash (Used to communicate with backend)
                 if (updateJSON.exists())
@@ -476,7 +478,7 @@ class MainViewController: UIViewController, UITableViewDelegate,UITableViewDataS
                 {
                     if (beginplaylistJSON == "NoDeviceSelected")
                     {
-                        
+                        notPlayingValidation = true
                         pressPlay = true
                         self.performSegue(withIdentifier: "toDevices", sender:nil)
                         

@@ -67,6 +67,12 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
         
         // Post Request
         Alamofire.request("https://spotify-jukebox.viljoen.industries/device.php",method:.post, parameters:getDevicesParameters).responseJSON { (responseData) -> Void in
+            
+            if (notPlayingValidation)
+            {
+                notPlayingValidation = false
+                pressPlay = true
+            }
             self.navigationController?.popViewController(animated: true)
 
             if((responseData.result.value) != nil) {
@@ -112,6 +118,14 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
         update()
     }
     
+//    override func viewDidDisappear(_ animated: Bool) {
+//        if (notPlayingValidation == true)
+//        {
+//            pressPlay = false
+//            notPlayingValidation = false
+//        }
+//    }
+    
    
 
 
@@ -120,11 +134,9 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
         let getDevicesParameters: Parameters = [
             "ImMobile": "ImMobile",
             "Action": "GetDevices",
-            "JukeboxCookie": userHash,
-            ]
+            "JukeboxCookie": userHash
+        ]
         
-        
-        // Post Request
         Alamofire.request("https://spotify-jukebox.viljoen.industries/device.php",method:.post, parameters:getDevicesParameters).responseJSON { (responseData) -> Void in
             
             if((responseData.result.value) != nil) {
@@ -156,6 +168,11 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
         
         
     }
+        
+     
+        
+        
+    }
     
     
     
@@ -164,7 +181,7 @@ class DevicesViewController: UIViewController,UITableViewDelegate,UITableViewDat
 
   
 
-}
+
 
 
 
