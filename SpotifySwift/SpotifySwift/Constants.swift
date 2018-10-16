@@ -14,4 +14,5 @@ struct Constants {
     static let code = "code"
    // static let secret = "2aa5bda602894ba98b8e73196fdc1b75"
     static let baseAddress = "https://spotify-jukebox.viljoen.industries/"
+    static let scope = "user-read-playback-state user-modify-playback-state streaming user-read-currently-playing app-remote-control"
 }

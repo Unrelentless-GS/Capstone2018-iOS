@@ -46,15 +46,22 @@ class ViewController: UIViewController {
     
     @IBAction func LoginButton(_ sender: UIButton) {
         
-        let authPath =  "https://accounts.spotify.com/authorize?nolinks=true&nosignup=true&response_type=\(Constants.code)&scope=streaming&utm_source=spotify-sdk&utm_medium=ios-sdk&utm_campaign=ios-sdk&redirect_uri=\(Constants.redirectURI)&show_dialog=true&client_id=\(Constants.clientID)"
+        let test = Constants.scope.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+
+        //let test = URL(string:Constants.scope)
         
+        
+        let authPath =  "https://accounts.spotify.com/authorize?nolinks=true&nosignup=true&response_type=\(Constants.code)&scope=\(test!)&utm_source=spotify-sdk&utm_medium=ios-sdk&utm_campaign=ios-sdk&redirect_uri=\(Constants.redirectURI)&show_dialog=true&client_id=\(Constants.clientID)"
+        
+     //   encodeURIComponent
+        print(authPath)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(receievedUrlFromSpotify(_:)),
                                                name: NSNotification.Name.Spotify.authURLOpened,
                                                object: nil)
         // Convert into URL
         if let authURL = URL(string: authPath){
-            
+            print(authURL)
             
             if let url = URL(string: authURL.absoluteString) {
                 let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)

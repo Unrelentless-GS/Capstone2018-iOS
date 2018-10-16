@@ -40,12 +40,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func setupSpotify() {
+        
         SPTAuth.defaultInstance().clientID = Constants.clientID
         SPTAuth.defaultInstance().redirectURL = URL(string:Constants.redirectURI)!
         SPTAuth.defaultInstance().sessionUserDefaultsKey = Constants.sessionKey
         
         //For this application we just want to stream music, so we will only request the streaming scope
-        SPTAuth.defaultInstance().requestedScopes = [SPTAuthStreamingScope]
+        SPTAuth.defaultInstance().requestedScopes = [Constants.scope]
         
         // Start the player (this is only need for applications that using streaming, which we will use
         // in this tutorial)
